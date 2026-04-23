@@ -1,0 +1,53 @@
+# ============================================================================
+# Database Settings
+# ============================================================================
+# Controls how the SQLite database is created and configured.
+# Read by create_db.py (and future sync/MCP scripts).
+#
+# Edit this file instead of modifying Python code directly.
+# After changes, re-run:  python system/create_db.py
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# SQLite PRAGMAs
+# ----------------------------------------------------------------------------
+# Applied after database creation. Each entry is a PRAGMA statement
+# (without the "PRAGMA" keyword).
+#
+# Common options:
+#   journal_mode=WAL    — Write-Ahead Logging; allows concurrent readers
+#                         while a writer is active (essential for sync +
+#                         MCP server running simultaneously). Persists
+#                         across connections once set.
+#   busy_timeout=5000   — Wait up to 5 seconds for a locked database
+#                         before returning SQLITE_BUSY. Per-connection.
+#   foreign_keys=ON     — Enforce foreign key constraints. Per-connection;
+#                         must be set on every new connection.
+#   cache_size=-8000    — Use 8MB of cache (negative = KB). Per-connection.
+#
+# Note: Some pragmas persist (journal_mode) while others are per-connection
+# (foreign_keys, busy_timeout, cache_size). Per-connection pragmas set here
+# only affect the create_db.py run — the sync script and MCP server will
+# need to set their own per-connection pragmas when they open a connection.
+# ----------------------------------------------------------------------------
+pragmas:
+  - journal_mode=WAL
+
+# ----------------------------------------------------------------------------
+# Create Mode
+# ----------------------------------------------------------------------------
+# Controls how CREATE TABLE statements in schema.sql are executed.
+#
+# Options:
+#   create_if_not_exists — Adds "IF NOT EXISTS" to each CREATE TABLE.
+#                          Safe to run repeatedly; existing tables and
+#                          their data are left untouched. New tables from
+#                          schema changes are added automatically.
+#                          This is the recommended default.
+#
+#   drop_and_create      — Drops ALL existing tables first, then creates
+#                          them fresh. USE WITH CAUTION: this deletes all
+#                          synced data. You will need to do a full re-sync
+#                          after using this mode.
+# ----------------------------------------------------------------------------
+create_mode: create_if_not_exists

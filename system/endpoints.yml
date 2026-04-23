@@ -1,0 +1,31 @@
+# ServiceTrade API endpoints for SafeHoods
+#
+# Source of truth for rebuilding mappings.yml from scratch.
+# Usage: python system/rebuild_mappings.py
+#
+# Child resources (invoiceitem, quoteitem) are auto-detected
+# by rebuild_mappings.py — do not list them here.
+
+static_resources:
+  - serviceline
+  - tag
+  - paymentterms
+  - region
+  - taxrate
+
+resources:
+  - endpoint: company
+  - endpoint: location
+  - endpoint: contact
+  - endpoint: job
+  - endpoint: appointment
+  - endpoint: invoice
+  - endpoint: quote
+  - endpoint: asset
+    required_params:
+      updatedAfter: 946684800    # 2000-01-01 — API requires this filter
+  - endpoint: deficiency
+  - endpoint: servicerecurrence
+    required_params:
+      updatedAfter: 946684800    # 2000-01-01 — returns 0 records without this
+  - endpoint: user

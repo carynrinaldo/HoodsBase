@@ -1,0 +1,1419 @@
+static_resources:
+- serviceline
+- tag
+- paymentterms
+- region
+- taxrate
+resources:
+  serviceline:
+    api_endpoint: /api/serviceline
+    response_data_key: data
+    fields:
+      id:
+        api_type: integer
+      name:
+        api_type: text
+      trade:
+        api_type: text
+      abbr:
+        api_type: text
+      icon:
+        api_type: text
+  tag:
+    api_endpoint: /api/tag
+    response_data_key: data
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      name:
+        api_type: text
+  paymentterms:
+    api_endpoint: /api/paymentterms
+    response_data_key: data
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      name:
+        api_type: text
+      orderIndex:
+        api_type: text
+  region:
+    api_endpoint: /api/region
+    response_data_key: data
+    fields: {}
+  taxrate:
+    api_endpoint: /api/taxrate
+    response_data_key: data
+    fields: {}
+  company:
+    api_endpoint: /api/company
+    response_data_key: data
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      name:
+        api_type: text
+      status:
+        api_type: text
+      refNumber:
+        api_type: text
+      customer:
+        api_type: boolean
+      vendor:
+        api_type: boolean
+      partsVendor:
+        api_type: boolean
+      primeContractor:
+        api_type: boolean
+      managingAccount:
+        api_type: unknown
+      shareId:
+        api_type: unknown
+      address:
+        api_type: object
+        nested_keys:
+        - street
+        - city
+        - state
+        - postalCode
+      phoneNumber:
+        api_type: text
+      serviceLinesProvided:
+        api_type: array
+      defaultBrand:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - displayName
+      logo:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - contentUrl
+        - aspect
+      tags:
+        api_type: array
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+      externalIds:
+        api_type: object
+        nested_keys:
+        - quickbooks
+  location:
+    api_endpoint: /api/location
+    response_data_key: data
+    pagination:
+      total_pages: 64
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      name:
+        api_type: text
+      refNumber:
+        api_type: text
+      legacyId:
+        api_type: unknown
+      lat:
+        api_type: real
+      lon:
+        api_type: real
+      phoneNumber:
+        api_type: text
+      email:
+        api_type: text
+      primaryContact:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - firstName
+        - lastName
+        - phone
+        - mobile
+        - alternatePhone
+        - email
+        - type
+        - types
+      address:
+        api_type: object
+        nested_keys:
+        - street
+        - city
+        - state
+        - postalCode
+      taxable:
+        api_type: boolean
+      status:
+        api_type: text
+      taxGroup:
+        api_type: unknown
+      geocodeQuality:
+        api_type: integer
+      generalManager:
+        api_type: text
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+      storeNumber:
+        api_type: text
+      company:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+      brand:
+        api_type: unknown
+      tags:
+        api_type: array
+      offices:
+        api_type: array
+        array_item_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+      remitToAddress:
+        api_type: unknown
+      remitToSource:
+        api_type: text
+      externalIds:
+        api_type: object
+        nested_keys:
+        - quickbooks
+  contact:
+    api_endpoint: /api/contact
+    response_data_key: data
+    pagination:
+      total_pages: 9
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      firstName:
+        api_type: text
+      lastName:
+        api_type: text
+      phone:
+        api_type: text
+      mobile:
+        api_type: text
+      alternatePhone:
+        api_type: text
+      email:
+        api_type: text
+      type:
+        api_type: text
+      types:
+        api_type: array
+      companies:
+        api_type: array
+      locations:
+        api_type: array
+        array_item_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+      company:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+      location:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+      status:
+        api_type: text
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+      externalIds:
+        api_type: object
+        nested_keys:
+        - quickbooks
+  job:
+    api_endpoint: /api/job
+    response_data_key: data
+    fields:
+      uri:
+        api_type: text
+      id:
+        api_type: integer
+      name:
+        api_type: text
+      customName:
+        api_type: unknown
+      type:
+        api_type: text
+      jobTypeWeight:
+        api_type: integer
+      status:
+        api_type: text
+      displayStatus:
+        api_type: text
+      substatus:
+        api_type: unknown
+      displaySubstatus:
+        api_type: unknown
+      visibility:
+        api_type: array
+      sectionVisibilities:
+        api_type: array
+      number:
+        api_type: integer
+      refNumber:
+        api_type: text
+      customerPo:
+        api_type: text
+      description:
+        api_type: text
+      scheduledDate:
+        api_type: integer
+      latestClockIn:
+        api_type: integer
+      ivrOpen:
+        api_type: boolean
+      ivrActivity:
+        api_type: unknown
+      serviceLine:
+        api_type: text
+      estimatedPrice:
+        api_type: integer
+      dueBy:
+        api_type: integer
+      dueAfter:
+        api_type: integer
+      completedOn:
+        api_type: unknown
+      vendor:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+      customer:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+      location:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+        - distance
+      owner:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+        - email
+        - avatar
+        - isTech
+        - isHelper
+      sales:
+        api_type: unknown
+      primaryContact:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - firstName
+        - lastName
+        - phone
+        - mobile
+        - alternatePhone
+        - email
+        - type
+        - types
+      assignedOffice:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+      offices:
+        api_type: array
+        array_item_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+      tags:
+        api_type: array
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+      percentComplete:
+        api_type: unknown
+      isProject:
+        api_type: boolean
+      serviceLinkAttachmentVisibility:
+        api_type: boolean
+      serviceLinkCommentVisibility:
+        api_type: boolean
+      serviceLinkAttachmentCategoryVisibility:
+        api_type: array
+      budgeted:
+        api_type: boolean
+      appointments:
+        api_type: array
+        array_item_keys:
+        - id
+        - uri
+        - name
+        - status
+        - techs
+        - windowStart
+        - windowEnd
+        - released
+      currentAppointment:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+        - techs
+        - windowStart
+        - windowEnd
+        - released
+      externalIds:
+        api_type: object
+        nested_keys:
+        - quickbooks
+      terms:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+      contract:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+      project:
+        api_type: unknown
+  appointment:
+    api_endpoint: /api/appointment
+    response_data_key: data
+    pagination:
+      total_pages: 4
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      name:
+        api_type: text
+      status:
+        api_type: text
+      windowStart:
+        api_type: integer
+      windowEnd:
+        api_type: integer
+      location:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+        - distance
+      vendor:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+      job:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - number
+        - name
+        - customName
+        - type
+        - primaryContact
+        - isProject
+        - description
+        - dueBy
+        - tags
+        - estimatedPrice
+        - jobTypeWeight
+      dueBy:
+        api_type: integer
+      serviceRequests:
+        api_type: array
+        array_item_keys:
+        - id
+        - uri
+        - description
+        - status
+        - completion
+        - serviceLine
+        - asset
+        - windowStart
+        - windowEnd
+        - estimatedPrice
+        - duration
+      techs:
+        api_type: array
+        array_item_keys:
+        - id
+        - uri
+        - name
+        - status
+        - email
+        - avatar
+        - isTech
+        - isHelper
+      offices:
+        api_type: array
+        array_item_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+      released:
+        api_type: boolean
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+  invoice:
+    api_endpoint: /api/invoice
+    response_data_key: data
+    pagination:
+      total_pages: 3
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      name:
+        api_type: text
+      type:
+        api_type: text
+      status:
+        api_type: text
+      substatus:
+        api_type: unknown
+      invoiceNumber:
+        api_type: text
+      refNumber:
+        api_type: text
+      taxAmount:
+        api_type: real
+      subtotal:
+        api_type: integer
+      totalPrice:
+        api_type: real
+      totalPaidAmount:
+        api_type: unknown
+      location:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+        - externalIds
+      terms:
+        api_type: unknown
+      job:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - number
+        - name
+        - customName
+        - type
+        - primaryContact
+        - isProject
+      visibility:
+        api_type: array
+      assignedUser:
+        api_type: unknown
+      customer:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+        - externalIds
+      vendor:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+      customerPo:
+        api_type: text
+      notes:
+        api_type: text
+      partial:
+        api_type: boolean
+      paid:
+        api_type: boolean
+      sent:
+        api_type: boolean
+      items:
+        api_type: array
+        array_item_keys:
+        - id
+        - uri
+        - description
+        - quantity
+        - price
+        - subtotal
+        - taxGroup
+        - taxRate
+        - taxRateDetails
+        - taxAmount
+        - totalPrice
+        - orderIndex
+        - libItem
+        - serviceLine
+        - jobItem
+        - serviceRequest
+      tags:
+        api_type: array
+      transactionDate:
+        api_type: integer
+      contract:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+      assignedOffice:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+      paymentTerms:
+        api_type: unknown
+      dueDate:
+        api_type: unknown
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+  invoiceitem:
+    api_endpoint: embedded
+    response_data_key: items
+    parent_resource: invoice
+    parent_id_field: invoiceId
+    fetch_mode: parent_endpoint
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      description:
+        api_type: text
+      quantity:
+        api_type: integer
+      price:
+        api_type: integer
+      subtotal:
+        api_type: integer
+      taxGroup:
+        api_type: unknown
+      taxRate:
+        api_type: real
+      taxRateDetails:
+        api_type: array
+      taxAmount:
+        api_type: real
+      totalPrice:
+        api_type: real
+      orderIndex:
+        api_type: integer
+      libItem:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - type
+        - code
+        - isGeneric
+        - externalIds
+      serviceLine:
+        api_type: object
+        nested_keys:
+        - id
+        - name
+        - trade
+        - abbr
+        - icon
+      jobItem:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - description
+        - cost
+        - usedOn
+      serviceRequest:
+        api_type: unknown
+      invoice:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+      invoiceRecurrence:
+        api_type: unknown
+      windowStart:
+        api_type: unknown
+      windowEnd:
+        api_type: unknown
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+  quote:
+    api_endpoint: /api/quote
+    response_data_key: data
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      name:
+        api_type: text
+      refNumber:
+        api_type: text
+      status:
+        api_type: text
+      notes:
+        api_type: text
+      customer:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+      vendor:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+      location:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+      deficiencySeverity:
+        api_type: text
+      deficiencyJobs:
+        api_type: array
+      respondBy:
+        api_type: integer
+      expiresOn:
+        api_type: integer
+      latestSubmission:
+        api_type: integer
+      latestAccepted:
+        api_type: integer
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+      subtotal:
+        api_type: text
+      taxAmount:
+        api_type: text
+      totalPrice:
+        api_type: text
+      quoteRequest:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+        - type
+      contract:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+      assignedTo:
+        api_type: object
+        nested_keys:
+        - uri
+        - id
+        - email
+        - legacyId
+      owner:
+        api_type: object
+        nested_keys:
+        - uri
+        - id
+        - email
+        - legacyId
+      sales:
+        api_type: unknown
+      serviceLines:
+        api_type: array
+      jobs:
+        api_type: array
+      substatus:
+        api_type: unknown
+      visibility:
+        api_type: array
+      items:
+        api_type: array
+        array_item_keys:
+        - id
+        - uri
+        - description
+      tags:
+        api_type: array
+      customerPo:
+        api_type: text
+      customerPoRequired:
+        api_type: boolean
+      terms:
+        api_type: unknown
+      assignedOffice:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+      description:
+        api_type: text
+      jobType:
+        api_type: text
+      serviceRequests:
+        api_type: array
+      taskingDetailLevel:
+        api_type: text
+      quoteLinkAttachmentVisibility:
+        api_type: boolean
+      quoteLinkCommentVisibility:
+        api_type: boolean
+      sectionVisibilities:
+        api_type: unknown
+      externalIds:
+        api_type: object
+        nested_keys:
+        - quickbooks
+  quoteitem:
+    api_endpoint: embedded
+    response_data_key: items
+    parent_resource: quote
+    parent_id_field: quoteId
+    fetch_mode: parent_endpoint
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      description:
+        api_type: text
+      libItem:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - type
+        - code
+        - isGeneric
+        - externalIds
+      serviceLine:
+        api_type: object
+        nested_keys:
+        - id
+        - name
+        - trade
+        - abbr
+        - icon
+      serviceRequest:
+        api_type: unknown
+      quote:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - status
+      price:
+        api_type: integer
+      quantity:
+        api_type: integer
+      taxRate:
+        api_type: integer
+      taxRateDetails:
+        api_type: array
+      cost:
+        api_type: integer
+      visibility:
+        api_type: array
+  asset:
+    api_endpoint: /api/asset
+    response_data_key: data
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      type:
+        api_type: text
+      name:
+        api_type: text
+      location:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+      serviceLine:
+        api_type: object
+        nested_keys:
+        - id
+        - name
+        - trade
+        - abbr
+        - icon
+      legacyId:
+        api_type: unknown
+      status:
+        api_type: text
+      display:
+        api_type: text
+      properties:
+        api_type: object
+        nested_keys: []
+      parent:
+        api_type: object
+        nested_keys:
+        - id
+        - type
+        - uri
+        - name
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+      orderIndex:
+        api_type: unknown
+      assetDefinition:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - type
+        - display
+      taskList:
+        api_type: unknown
+      isAbstractGroup:
+        api_type: boolean
+      hasActiveTaskList:
+        api_type: boolean
+      externalIds:
+        api_type: object
+        nested_keys:
+        - quickbooks
+  deficiency:
+    api_endpoint: /api/deficiency
+    response_data_key: data
+    fields:
+      id:
+        api_type: integer
+      refNumber:
+        api_type: text
+      uri:
+        api_type: text
+      reportedOn:
+        api_type: integer
+      severity:
+        api_type: text
+      title:
+        api_type: text
+      status:
+        api_type: text
+      lastReportedStatus:
+        api_type: text
+      resolution:
+        api_type: text
+      reportSource:
+        api_type: text
+      description:
+        api_type: text
+      proposedFix:
+        api_type: text
+      owner:
+        api_type: unknown
+      sales:
+        api_type: unknown
+      reporter:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+        - email
+        - avatar
+        - isTech
+        - isHelper
+      asset:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - type
+        - name
+      location:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+      serviceLine:
+        api_type: object
+        nested_keys:
+        - id
+        - name
+        - trade
+        - abbr
+        - icon
+      job:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - number
+        - name
+        - customName
+        - type
+        - primaryContact
+        - isProject
+      visibility:
+        api_type: array
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+      externalIds:
+        api_type: object
+        nested_keys:
+        - quickbooks
+  servicerecurrence:
+    api_endpoint: /api/servicerecurrence
+    response_data_key: data
+    fields:
+      uri:
+        api_type: text
+      id:
+        api_type: integer
+      description:
+        api_type: text
+      serviceLine:
+        api_type: object
+        nested_keys:
+        - id
+        - name
+        - trade
+        - abbr
+        - icon
+      asset:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - type
+        - name
+      location:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+        - generalManager
+      firstStart:
+        api_type: integer
+      firstEnd:
+        api_type: integer
+      frequency:
+        api_type: text
+      interval:
+        api_type: integer
+      frequencyCategory:
+        api_type: unknown
+      schedulingType:
+        api_type: text
+      repeatWeekday:
+        api_type: boolean
+      endsOn:
+        api_type: integer
+      parent:
+        api_type: object
+        nested_keys:
+        - uri
+        - id
+      contract:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+      preferredTechs:
+        api_type: array
+      preferredVendor:
+        api_type: unknown
+      estimatedPrice:
+        api_type: integer
+      duration:
+        api_type: integer
+      preferredStartTime:
+        api_type: integer
+      items:
+        api_type: array
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+      taskingDuration:
+        api_type: unknown
+      tasks:
+        api_type: array
+      taskLists:
+        api_type: array
+  servicerecurrenceitem:
+    api_endpoint: embedded
+    response_data_key: items
+    parent_resource: servicerecurrence
+    parent_id_field: servicerecurrenceId
+    fetch_mode: parent_endpoint
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      description:
+        api_type: text
+      libItem:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - type
+        - code
+        - isGeneric
+        - externalIds
+      serviceLine:
+        api_type: object
+        nested_keys:
+        - id
+        - name
+        - trade
+        - abbr
+        - icon
+      serviceRequest:
+        api_type: unknown
+      serviceRecurrence:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - description
+        - frequency
+        - interval
+        - repeatWeekday
+      serviceTemplate:
+        api_type: unknown
+      price:
+        api_type: integer
+      quantity:
+        api_type: integer
+  user:
+    api_endpoint: /api/user
+    response_data_key: data
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      name:
+        api_type: text
+      status:
+        api_type: text
+      email:
+        api_type: text
+      avatar:
+        api_type: object
+        nested_keys:
+        - small
+        - medium
+        - large
+      isTech:
+        api_type: boolean
+      isHelper:
+        api_type: boolean
+      firstName:
+        api_type: text
+      lastName:
+        api_type: text
+      username:
+        api_type: text
+      phone:
+        api_type: text
+      timezone:
+        api_type: text
+      isSales:
+        api_type: boolean
+      company:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - status
+      location:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+      account:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+      manager:
+        api_type: unknown
+      details:
+        api_type: text
+      activities:
+        api_type: array
+      serviceLines:
+        api_type: array
+        array_item_keys:
+        - id
+        - name
+        - trade
+        - abbr
+        - icon
+      roles:
+        api_type: array
+        array_item_keys:
+        - id
+        - name
+      mfaRequired:
+        api_type: unknown
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+      externalIds:
+        api_type: object
+        nested_keys:
+        - quickbooks

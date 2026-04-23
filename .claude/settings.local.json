@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pdftotext /Users/al/Documents/Claude/SafeHoods/docs/APIdocumentation.pdf -)",
+      "Bash(docker exec:*)",
+      "Bash(docker ps:*)",
+      "Bash(python3 -m json.tool)"
+    ]
+  }
+}

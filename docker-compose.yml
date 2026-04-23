@@ -1,0 +1,10 @@
+services:
+  safehoods:
+    build: .
+    container_name: safehoods-dev
+    env_file: .env
+    volumes:
+      - .:/app          # mount entire project — code changes apply without rebuild
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped

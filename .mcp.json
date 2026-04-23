@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "safehoods": {
+      "command": "python",
+      "args": ["mcp/server.py"]
+    }
+  }
+}

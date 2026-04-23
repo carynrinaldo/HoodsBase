@@ -1,0 +1,8 @@
+.env
+.session_token
+*.db
+data/
+.DS_Store
+__pycache__/
+logs/*.log
+logs/*.log.*

@@ -1,0 +1,11 @@
+# SafeHoods Sync Schedule
+# -------------------------
+# Set the time you want the nightly sync to run.
+# Use 24-hour format. Timezone: America/Los_Angeles (set in Dockerfile).
+#
+# Examples:
+#   02:00  — 2:00 AM
+#   22:30  — 10:30 PM
+#   06:00  — 6:00 AM
+
+sync_time: "02:00"
