@@ -893,6 +893,112 @@ resources:
         skip: true
       taskLists:
         skip: true
+  servicerequest:
+    description: 'Job-level service request — a specific item of work to be done (e.g. "Kitchen exhaust hood cleaning"). Derived
+      from service recurrences, referenced by invoice_item and quote_item via service_request_id. Distinct from service_recurrence
+      (location template) and invoice_item (billing line).
+
+      '
+    fields:
+      status: {}
+      description:
+        prompt_comment: e.g. "Kitchen exhaust hood cleaning"
+      serviceLine:
+        extract_key: id
+        db_type: integer
+        db_column: service_line_id
+      asset:
+        extract_key: id
+        db_type: integer
+        db_column: asset_id
+      location:
+        extract_key: id
+        db_type: integer
+        db_column: location_id
+      job:
+        extract_key: id
+        db_type: integer
+        db_column: job_id
+      deficiency:
+        extract_key: id
+        db_type: integer
+        db_column: deficiency_id
+      changeOrder:
+        db_column: change_order_id
+        db_type: integer
+        extract_key: id
+      budget:
+        db_column: budget_id
+        db_type: integer
+        extract_key: id
+      contract:
+        extract_key: id
+        db_type: integer
+        db_column: contract_id
+      windowStart:
+        db_type: timestamp
+        db_column: window_start
+      windowEnd:
+        db_type: timestamp
+        db_column: window_end
+      closedOn:
+        db_column: closed_on
+        db_type: timestamp
+      created:
+        db_column: created_at
+        db_type: timestamp
+      updated:
+        db_column: updated_at
+        db_type: timestamp
+      serviceRecurrence:
+        extract_key: id
+        db_type: integer
+        db_column: service_recurrence_id
+      preferredTechs:
+        skip: true
+      preferredVendor:
+        db_column: preferred_vendor_id
+        db_type: integer
+        extract_key: id
+      estimatedPrice:
+        db_type: real
+        db_column: estimated_price
+      duration:
+        prompt_comment: seconds
+      preferredStartTime:
+        db_column: preferred_start_time
+        prompt_comment: seconds from midnight
+      visibility:
+        db_type: text
+      items:
+        skip: true
+      quoteRequests:
+        skip: true
+      originalWindowStart:
+        db_column: original_window_start
+        db_type: timestamp
+      originalWindowEnd:
+        db_column: original_window_end
+        db_type: timestamp
+      serviceLinkAttachmentVisibility:
+        db_type: integer
+        db_column: service_link_attachment_visibility
+      serviceLinkCommentVisibility:
+        db_type: integer
+        db_column: service_link_comment_visibility
+      quoteLinkAttachmentVisibility:
+        db_column: quote_link_attachment_visibility
+        db_type: integer
+      quoteLinkCommentVisibility:
+        db_column: quote_link_comment_visibility
+        db_type: integer
+      serviceLinkAttachmentCategoryVisibility:
+        db_column: service_link_attachment_category_visibility
+        db_type: text
+      taskInstances:
+        skip: true
+      taskLists:
+        skip: true
   user:
     description: 'ServiceTrade user — technicians, office staff, salespeople.
 

@@ -29,6 +29,7 @@ TABLE_NAME_MAP = {
     "quoteitem": "quote_item",
     "servicerecurrence": "service_recurrence",
     "servicerecurrenceitem": "service_recurrence_item",
+    "servicerequest": "service_request",
     "paymentterms": "payment_terms",
     "taxrate": "tax_rate",
 }

@@ -427,6 +427,10 @@ resources:
         - status
       tags:
         api_type: array
+        array_item_keys:
+        - id
+        - uri
+        - name
       created:
         api_type: integer
       updated:
@@ -1317,6 +1321,186 @@ resources:
         - frequency
         - interval
         - repeatWeekday
+      serviceTemplate:
+        api_type: unknown
+      price:
+        api_type: integer
+      quantity:
+        api_type: integer
+  servicerequest:
+    api_endpoint: /api/servicerequest
+    response_data_key: data
+    pagination:
+      total_pages: 3
+    fields:
+      uri:
+        api_type: text
+      id:
+        api_type: integer
+      status:
+        api_type: text
+      description:
+        api_type: text
+      serviceLine:
+        api_type: object
+        nested_keys:
+        - id
+        - name
+        - trade
+        - abbr
+        - icon
+      asset:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - type
+        - name
+      location:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - refNumber
+        - legacyId
+        - lat
+        - lon
+        - phoneNumber
+        - email
+        - primaryContact
+        - address
+        - taxable
+        - status
+        - generalManager
+      job:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - number
+        - name
+        - customName
+        - type
+        - primaryContact
+        - isProject
+      deficiency:
+        api_type: object
+        nested_keys:
+        - id
+        - refNumber
+        - uri
+        - name
+        - description
+      changeOrder:
+        api_type: unknown
+      budget:
+        api_type: unknown
+      contract:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+      windowStart:
+        api_type: integer
+      windowEnd:
+        api_type: integer
+      closedOn:
+        api_type: integer
+      created:
+        api_type: integer
+      updated:
+        api_type: integer
+      serviceRecurrence:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - description
+        - frequency
+        - interval
+        - repeatWeekday
+      preferredTechs:
+        api_type: array
+      preferredVendor:
+        api_type: unknown
+      estimatedPrice:
+        api_type: integer
+      duration:
+        api_type: integer
+      preferredStartTime:
+        api_type: integer
+      visibility:
+        api_type: array
+      items:
+        api_type: array
+      quoteRequests:
+        api_type: array
+        array_item_keys:
+        - id
+        - uri
+        - name
+        - status
+        - type
+      originalWindowStart:
+        api_type: integer
+      originalWindowEnd:
+        api_type: integer
+      serviceLinkAttachmentVisibility:
+        api_type: boolean
+      serviceLinkCommentVisibility:
+        api_type: boolean
+      quoteLinkAttachmentVisibility:
+        api_type: unknown
+      quoteLinkCommentVisibility:
+        api_type: unknown
+      serviceLinkAttachmentCategoryVisibility:
+        api_type: unknown
+      taskInstances:
+        api_type: array
+      taskLists:
+        api_type: array
+  servicerequestitem:
+    api_endpoint: embedded
+    response_data_key: items
+    parent_resource: servicerequest
+    parent_id_field: servicerequestId
+    fetch_mode: parent_endpoint
+    fields:
+      id:
+        api_type: integer
+      uri:
+        api_type: text
+      description:
+        api_type: text
+      libItem:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - name
+        - type
+        - code
+        - isGeneric
+        - externalIds
+      serviceLine:
+        api_type: object
+        nested_keys:
+        - id
+        - name
+        - trade
+        - abbr
+        - icon
+      serviceRequest:
+        api_type: object
+        nested_keys:
+        - id
+        - uri
+        - description
+        - status
+      serviceRecurrence:
+        api_type: unknown
       serviceTemplate:
         api_type: unknown
       price:

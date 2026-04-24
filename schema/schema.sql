@@ -340,6 +340,39 @@ CREATE TABLE service_recurrence (
   updated_at INTEGER
 );
 
+-- Job-level service request — a specific item of work to be done (e.g. "Kitchen exhaust hood cleaning"). Derived from service recurrences, referenced by invoice_item and quote_item via service_request_id. Distinct from service_recurrence (location template) and invoice_item (billing line).
+CREATE TABLE service_request (
+  id INTEGER PRIMARY KEY,
+  status TEXT,
+  description TEXT,  -- e.g. "Kitchen exhaust hood cleaning"
+  service_line_id INTEGER,
+  asset_id INTEGER,
+  location_id INTEGER,
+  job_id INTEGER,
+  deficiency_id INTEGER,
+  change_order_id INTEGER,
+  budget_id INTEGER,
+  contract_id INTEGER,
+  window_start INTEGER,
+  window_end INTEGER,
+  closed_on INTEGER,
+  created_at INTEGER,
+  updated_at INTEGER,
+  service_recurrence_id INTEGER,
+  preferred_vendor_id INTEGER,
+  estimated_price REAL,
+  duration INTEGER,  -- seconds
+  preferred_start_time INTEGER,  -- seconds from midnight
+  visibility TEXT,
+  original_window_start INTEGER,
+  original_window_end INTEGER,
+  service_link_attachment_visibility INTEGER,
+  service_link_comment_visibility INTEGER,
+  quote_link_attachment_visibility INTEGER,
+  quote_link_comment_visibility INTEGER,
+  service_link_attachment_category_visibility TEXT
+);
+
 -- ServiceTrade user — technicians, office staff, salespeople.
 CREATE TABLE user (
   id INTEGER PRIMARY KEY,

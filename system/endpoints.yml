@@ -28,4 +28,5 @@ resources:
   - endpoint: servicerecurrence
     required_params:
       updatedAfter: 946684800    # 2000-01-01 — returns 0 records without this
+  - endpoint: servicerequest
   - endpoint: user

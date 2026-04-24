@@ -561,7 +561,72 @@ resource_overrides:
       Line item on a service recurrence (parts, filters). Currently
       not needed in the schema — recurrence-level data is sufficient.
     skip_resource: true
+  
+  servicerequest:
+    description: >
+      Job-level service request — a specific item of work to be done
+      (e.g. "Kitchen exhaust hood cleaning"). Derived from service
+      recurrences, referenced by invoice_item and quote_item via
+      service_request_id. Distinct from service_recurrence (location
+      template) and invoice_item (billing line).
+    fields:
+      description:
+        prompt_comment: 'e.g. "Kitchen exhaust hood cleaning"'
+      duration:
+        prompt_comment: "seconds"
+      preferredStartTime:
+        db_column: preferred_start_time
+        prompt_comment: "seconds from midnight"
+      visibility:
+        db_type: text  # array stored as JSON
+      items:
+        skip: true  # child resource not synced
+      preferredTechs:
+        skip: true  # array of User — handled via join
+      quoteRequests:
+        skip: true  # array of quoterequest refs — not synced
+      taskInstances:
+        skip: true
+      taskLists:
+        skip: true
+      originalWindowStart:
+        db_column: original_window_start
+        db_type: timestamp
+      originalWindowEnd:
+        db_column: original_window_end
+        db_type: timestamp
+      closedOn:
+        db_column: closed_on
+        db_type: timestamp
+      serviceLinkAttachmentCategoryVisibility:
+        db_column: service_link_attachment_category_visibility
+        db_type: text
+      # FK objects that appear as api_type: unknown (null in first page)
+      changeOrder:
+        db_column: change_order_id
+        db_type: integer
+        extract_key: id
+      budget:
+        db_column: budget_id
+        db_type: integer
+        extract_key: id
+      preferredVendor:
+        db_column: preferred_vendor_id
+        db_type: integer
+        extract_key: id
+      quoteLinkAttachmentVisibility:
+        db_column: quote_link_attachment_visibility
+        db_type: integer
+      quoteLinkCommentVisibility:
+        db_column: quote_link_comment_visibility
+        db_type: integer
 
+  servicerequestitem:
+    description: >
+      Line item on a service request (sparse — id/uri/description only).
+      Currently not needed in schema.
+    skip_resource: true
+    
   user:
     description: >
       ServiceTrade user — technicians, office staff, salespeople.
