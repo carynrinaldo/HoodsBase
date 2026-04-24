@@ -1,4 +1,4 @@
-# SafeHoods Sync Schedule
+# HoodsBase Sync Schedule
 # -------------------------
 # Set the time you want the nightly sync to run.
 # Use 24-hour format. Timezone: America/Los_Angeles (set in Dockerfile).

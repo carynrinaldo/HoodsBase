@@ -1,4 +1,4 @@
-# SafeHoods Operations Runbook
+# HoodsBase Operations Runbook
 
 Organized from most common to most disruptive. The first half covers everyday tasks you can run safely and repeatedly. The second half covers structural changes and recovery procedures — read the notes before running anything there.
 
@@ -11,10 +11,10 @@ docker compose up -d
 All commands run inside the Docker container. Either open a shell:
 
 ```bash
-docker exec -it safehoods-dev bash
+docker exec -it hoodsbase-dev bash
 ```
 
-Or prefix each command with `docker exec safehoods-dev`.
+Or prefix each command with `docker exec hoodsbase-dev`.
 
 To watch all container activity (syncs, errors, cron output) as a single stream:
 
@@ -84,7 +84,7 @@ sync_time: "02:00"   # change this to any 24-hour time
 Then restart the container to apply it:
 
 ```bash
-docker restart safehoods-dev
+docker restart hoodsbase-dev
 ```
 
 ---
@@ -109,15 +109,15 @@ Use this when a resource has records in SQLite that were deleted in ServiceTrade
 
 ```bash
 # Step 1: Open SQLite
-docker exec -it safehoods-dev python3 -c "import sqlite3; conn = sqlite3.connect('data/safehoods.db')"
+docker exec -it hoodsbase-dev python3 -c "import sqlite3; conn = sqlite3.connect('data/hoodsbase.db')"
 ```
 
 Actually, open SQLite directly:
 
 ```bash
-docker exec -it safehoods-dev python3 -c "
+docker exec -it hoodsbase-dev python3 -c "
 import sqlite3
-conn = sqlite3.connect('data/safehoods.db')
+conn = sqlite3.connect('data/hoodsbase.db')
 conn.execute('DELETE FROM invoice')
 conn.execute('DELETE FROM invoice_item')
 conn.execute(\"DELETE FROM sync_status WHERE resource IN ('invoice', 'invoiceitem')\")
@@ -126,7 +126,7 @@ print('Done')
 "
 ```
 
-Or use any SQLite client pointed at `data/safehoods.db`, then:
+Or use any SQLite client pointed at `data/hoodsbase.db`, then:
 
 ```bash
 # Step 2: Full re-pull
@@ -232,7 +232,7 @@ These procedures delete data or rebuild core files. Read the notes before runnin
 
 ```bash
 # Step 1: Delete the database files
-rm data/safehoods.db data/safehoods.db-wal data/safehoods.db-shm
+rm data/hoodsbase.db data/hoodsbase.db-wal data/hoodsbase.db-shm
 
 # Step 2: Recreate the empty database from the existing schema
 #         Also restores any saved report views from reports/*.sql automatically
@@ -257,7 +257,7 @@ Any report views previously saved via Claude's `create_view` tool are automatica
 python system/rebuild_all.py
 
 # If the schema changed, reset the database too
-rm data/safehoods.db data/safehoods.db-wal data/safehoods.db-shm
+rm data/hoodsbase.db data/hoodsbase.db-wal data/hoodsbase.db-shm
 python system/create_db.py
 python sync/sync.py
 ```

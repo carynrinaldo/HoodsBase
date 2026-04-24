@@ -32,7 +32,7 @@ system/api_knowledge.yml ──────────────────�
                                                                     │
                                     system/db_settings.yml ─────────┤
                                                                     ▼
-                                                 create_db.py ──→ data/safehoods.db
+                                                 create_db.py ──→ data/hoodsbase.db
 ```
 
 ## Files
@@ -48,7 +48,7 @@ Database configuration in YAML — edit this instead of modifying Python code. T
 See the file itself for detailed comments on each option and common pragma values.
 
 ### create_db.py
-Reads `schema/schema.sql` and `system/db_settings.yml`, creates `data/safehoods.db`. Safe to run repeatedly — with `create_if_not_exists` mode, existing tables and data are untouched and new tables are added.
+Reads `schema/schema.sql` and `system/db_settings.yml`, creates `data/hoodsbase.db`. Safe to run repeatedly — with `create_if_not_exists` mode, existing tables and data are untouched and new tables are added.
 
 ```bash
 python system/create_db.py
@@ -133,15 +133,15 @@ These files control when the nightly sync runs inside the Docker container.
 sync_time: "02:00"   # 2:00 AM Pacific
 ```
 
-To apply a change: edit this file and restart the container (`docker restart safehoods-dev`). The new schedule takes effect on the next startup.
+To apply a change: edit this file and restart the container (`docker restart hoodsbase-dev`). The new schedule takes effect on the next startup.
 
 ### write_crontab.py
-Called automatically by `entrypoint.sh` at container startup. Reads `schedule.yml`, validates the time format, and writes `/etc/cron.d/safehoods`. Not intended to be run manually.
+Called automatically by `entrypoint.sh` at container startup. Reads `schedule.yml`, validates the time format, and writes `/etc/cron.d/hoodsbase`. Not intended to be run manually.
 
 **What it does:**
 - Parses `sync_time` from `schedule.yml`
 - Validates format (`HH:MM`, 24-hour) and range — exits non-zero with a clear error if invalid so the container fails fast rather than silently never syncing
-- Writes the cron entry to `/etc/cron.d/safehoods` with correct permissions (0644, required by cron)
+- Writes the cron entry to `/etc/cron.d/hoodsbase` with correct permissions (0644, required by cron)
 
 ---
 

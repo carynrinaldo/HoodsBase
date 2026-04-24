@@ -1,8 +1,8 @@
-# Getting Started with SafeHoods
+# Getting Started with HoodsBase
 
 ## What this is
 
-SafeHoods is a business intelligence system for a commercial hood cleaning company. It pulls operational data out of [ServiceTrade](https://servicetrade.com) (the company's field service platform) into a local database on your computer, then lets Claude AI answer business questions in plain English.
+HoodsBase is a business intelligence system for a commercial hood cleaning company called SafeHoods. It pulls operational data out of [ServiceTrade](https://servicetrade.com) (the company's field service platform) into a local database on your computer, then lets Claude AI answer business questions in plain English.
 
 In practice, you open Claude Desktop and ask questions like:
 
@@ -16,7 +16,7 @@ Claude looks up the answer in the database and responds in plain English. No das
 
 ## How the pieces fit together
 
-Before installing anything, it helps to see the big picture. SafeHoods has three main pieces, and they each do one job:
+Before installing anything, it helps to see the big picture. HoodsBase has three main pieces, and they each do one job:
 
 ```
   ┌──────────────┐         ┌──────────────────────────────────────────┐
@@ -48,14 +48,14 @@ Before installing anything, it helps to see the big picture. SafeHoods has three
 
 You may already be familiar with Claude at [claude.ai](https://claude.ai) — the chat interface you use in a browser. Claude Desktop is a separate app that runs on your computer, and the key difference is that **it can connect to local tools and data**.
 
-On the web, Claude can only work with what you paste into the conversation. Claude Desktop can reach into databases, files, and services running on your machine through MCP connections. That's what makes SafeHoods work — Claude Desktop connects to the MCP server in the Docker container, which gives it access to the full business database.
+On the web, Claude can only work with what you paste into the conversation. Claude Desktop can reach into databases, files, and services running on your machine through MCP connections. That's what makes HoodsBase work — Claude Desktop connects to the MCP server in the Docker container, which gives it access to the full business database.
 
 The conversations feel the same. You type questions, Claude answers. The difference is that Claude Desktop can go look things up in real data instead of just working with what you tell it.
 
 > **Placeholder: screenshots**
 > Two images would help here:
 > 1. Claude on the web (claude.ai) — showing a plain conversation
-> 2. Claude Desktop — showing a conversation where Claude is querying the SafeHoods database
+> 2. Claude Desktop — showing a conversation where Claude is querying the HoodsBase database
 >
 > The visual contrast makes the difference immediately clear.
 
@@ -63,15 +63,15 @@ The conversations feel the same. You type questions, Claude answers. The differe
 
 ## Setting up your computer
 
-You need to install two things before SafeHoods can run: Docker (which runs the data pipeline) and Claude Desktop (which is how you talk to it). The next two sections walk through both.
+You need to install two things before HoodsBase can run: Docker (which runs the data pipeline) and Claude Desktop (which is how you talk to it). The next two sections walk through both.
 
 ---
 
 ## Installing Docker Desktop on Windows 11
 
-SafeHoods runs inside a **Docker container**. If that term is new to you, here's the short version: a container is like a lightweight, self-contained computer running inside your computer. It has its own operating system (Linux), its own Python installation, and all the libraries SafeHoods needs — completely isolated from everything else on your machine.
+HoodsBase runs inside a **Docker container**. If that term is new to you, here's the short version: a container is like a lightweight, self-contained computer running inside your computer. It has its own operating system (Linux), its own Python installation, and all the libraries HoodsBase needs — completely isolated from everything else on your machine.
 
-This matters for SafeHoods because:
+This matters for HoodsBase because:
 
 - **You don't install Python or any dependencies on your machine.** Everything runs inside the container.
 - **The sync jobs, cron schedule, and database all live inside the container.** You interact with it by sending commands in, but it manages itself.
@@ -155,7 +155,7 @@ Sign in with your Anthropic account (the same one you use at claude.ai). If you 
 
 ### Step 3: Verify it works
 
-Once you're signed in, you should see a chat interface — similar to the web version. Try asking Claude a quick question to confirm everything is working. At this point it's just regular Claude — we'll connect it to the SafeHoods database later in the setup process.
+Once you're signed in, you should see a chat interface — similar to the web version. Try asking Claude a quick question to confirm everything is working. At this point it's just regular Claude — we'll connect it to the HoodsBase database later in the setup process.
 
 > **Placeholder: screenshot**
 > A screenshot of Claude Desktop's main chat window after sign-in would help here — so the reader knows they're in the right place.
@@ -174,12 +174,12 @@ At this point you should have both Docker Desktop and Claude Desktop installed. 
 
 **1. Unzip and open a terminal in the project folder**
 
-Unzip the project folder somewhere on your computer (e.g., `C:\SafeHoods`). The `.env` file with the ServiceTrade credentials is already included — you shouldn't need to change anything.
+Unzip the project folder somewhere on your computer (e.g., `C:\HoodsBase`). The `.env` file with the ServiceTrade credentials is already included — you shouldn't need to change anything.
 
 Open **PowerShell** and navigate to the project folder:
 
 ```powershell
-cd C:\SafeHoods
+cd C:\HoodsBase
 ```
 
 All the commands below need to be run from this folder — Docker expects to find its configuration files here.
@@ -205,9 +205,9 @@ The database is already included in the zip file with all current data, so there
 Copy and paste this entire block into PowerShell — it's a single command that checks all the tables:
 
 ```powershell
-docker exec safehoods-dev python -c "
+docker exec hoodsbase-dev python -c "
 import sqlite3
-db = sqlite3.connect('data/safehoods.db')
+db = sqlite3.connect('data/hoodsbase.db')
 for row in db.execute('SELECT resource, record_count FROM sync_status ORDER BY resource'):
     print(f'{row[0]:25s} {row[1]:>6,d}')
 "
@@ -221,7 +221,7 @@ If you ever need to rebuild the database from scratch, see the [runbooks](docs/r
 
 ## Connect Claude Desktop to the database
 
-Right now Claude Desktop is just regular Claude — it can't see the SafeHoods data yet. This step connects the two by registering the MCP server so Claude knows how to reach the database inside the Docker container.
+Right now Claude Desktop is just regular Claude — it can't see the HoodsBase data yet. This step connects the two by registering the MCP server so Claude knows how to reach the database inside the Docker container.
 
 ### Step 1: Open the Claude Desktop config file
 
@@ -233,16 +233,16 @@ Claude Desktop stores its MCP server configuration in a JSON file. To open it:
 
 This opens the file `claude_desktop_config.json` in your text editor. It may be empty or have an empty `{}` in it.
 
-### Step 2: Add the SafeHoods MCP server
+### Step 2: Add the HoodsBase MCP server
 
 Replace the contents of the file with:
 
 ```json
 {
   "mcpServers": {
-    "safehoods": {
+    "hoodsbase": {
       "command": "docker",
-      "args": ["exec", "-i", "safehoods-dev", "python", "/app/mcp/server.py"]
+      "args": ["exec", "-i", "hoodsbase-dev", "python", "/app/mcp/server.py"]
     }
   }
 }
@@ -250,7 +250,7 @@ Replace the contents of the file with:
 
 Save and close the file.
 
-This tells Claude Desktop: "there's a server called `safehoods` — to reach it, run this command inside the Docker container." **The container must be running for this to work.**
+This tells Claude Desktop: "there's a server called `hoodsbase` — to reach it, run this command inside the Docker container." **The container must be running for this to work.**
 
 ### Step 3: Restart Claude Desktop and verify
 
@@ -286,7 +286,7 @@ This is completely optional. You can do everything through Claude. But if you're
 Full setup instructions are in [docs/future/odbc-setup.md](docs/future/odbc-setup.md) — it covers driver installation, DSN configuration, and connecting from both Excel and Access. The short version:
 
 1. Download the SQLite ODBC driver from http://www.ch-werner.de/sqliteodbc/ — make sure you match 32-bit or 64-bit to your Office installation
-2. Set up a DSN (a saved connection profile) pointing to `data/safehoods.db` in read-only mode
+2. Set up a DSN (a saved connection profile) pointing to `data/hoodsbase.db` in read-only mode
 3. In Excel: **Data** → **Get Data** → **From ODBC** → select the DSN
 
 ---
@@ -295,7 +295,7 @@ Full setup instructions are in [docs/future/odbc-setup.md](docs/future/odbc-setu
 
 This is worth understanding because it shapes everything about how the project is built.
 
-**SafeHoods was developed by AI and is operated by AI.** The code was written through conversations with Claude, and the end user interacts with the system through Claude. This isn't a traditional codebase with an AI bolted on — it was designed from the ground up for this workflow.
+**HoodsBase was developed by AI and is operated by AI.** The code was written through conversations with Claude, and the end user interacts with the system through Claude. This isn't a traditional codebase with an AI bolted on — it was designed from the ground up for this workflow.
 
 That shows up in a few key ways:
 
@@ -326,7 +326,7 @@ Or say you want to start pulling a new type of data from ServiceTrade. You could
 ## Where things live
 
 ```
-SafeHoods/
+HoodsBase/
 ├── CLAUDE.md                 # Brief for Claude — read first when starting a conversation
 ├── GETTING_STARTED.md        # You are here
 ├── Dockerfile                # Container definition (Python 3.12)

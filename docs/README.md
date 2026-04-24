@@ -1,8 +1,8 @@
-# SafeHoods Documentation
+# HoodsBase Documentation
 
-## What is SafeHoods?
+## What is HoodsBase?
 
-SafeHoods is a business intelligence system for a commercial hood cleaning company. The business uses [ServiceTrade](https://servicetrade.com) to manage its operations — customers, jobs, invoices, quotes, technician scheduling, and compliance tracking. SafeHoods pulls that data out of the ServiceTrade API into a local SQLite database, then lets Claude AI answer business questions in plain English by writing SQL on the fly.
+HoodsBase is a business intelligence system for a commercial hood cleaning company called SafeHoods. The business uses [ServiceTrade](https://servicetrade.com) to manage its operations — customers, jobs, invoices, quotes, technician scheduling, and compliance tracking. HoodsBase pulls that data out of the ServiceTrade API into a local SQLite database, then lets Claude AI answer business questions in plain English by writing SQL on the fly.
 
 The primary user is the company's CFO. Instead of clicking through ServiceTrade's UI or building static reports, he can ask questions like:
 
@@ -80,20 +80,20 @@ This builds the image and starts the container in the background. The container 
 If `schema/schema.sql` already exists (it's checked into the repo), skip straight to creating the database:
 
 ```bash
-docker exec safehoods-dev python system/create_db.py
+docker exec hoodsbase-dev python system/create_db.py
 ```
 
 To regenerate the schema from the live API (requires valid credentials):
 
 ```bash
-docker exec safehoods-dev python system/rebuild_all.py
-docker exec safehoods-dev python system/create_db.py
+docker exec hoodsbase-dev python system/rebuild_all.py
+docker exec hoodsbase-dev python system/create_db.py
 ```
 
 ### 4. Run the initial sync
 
 ```bash
-docker exec safehoods-dev python sync/sync.py
+docker exec hoodsbase-dev python sync/sync.py
 ```
 
 This does a full backfill on the first run (~90-100 seconds). Watch progress in real time:
@@ -105,7 +105,7 @@ docker compose logs -f
 ### 5. Create timestamp views (optional)
 
 ```bash
-docker exec safehoods-dev python schema/generate_views.py
+docker exec hoodsbase-dev python schema/generate_views.py
 ```
 
 This creates `v_` views (e.g. `v_job`, `v_invoice`) that include human-readable dates alongside the raw Unix timestamps.
@@ -113,9 +113,9 @@ This creates `v_` views (e.g. `v_job`, `v_invoice`) that include human-readable 
 ### 6. Verify
 
 ```bash
-docker exec safehoods-dev python -c "
+docker exec hoodsbase-dev python -c "
 import sqlite3
-db = sqlite3.connect('data/safehoods.db')
+db = sqlite3.connect('data/hoodsbase.db')
 for row in db.execute('SELECT resource, record_count FROM sync_status ORDER BY resource'):
     print(f'{row[0]:25s} {row[1]:>6,d}')
 "
@@ -128,13 +128,13 @@ for row in db.execute('SELECT resource, record_count FROM sync_status ORDER BY r
 docker compose logs -f
 
 # Incremental sync (run nightly or as needed)
-docker exec safehoods-dev python sync/sync.py
+docker exec hoodsbase-dev python sync/sync.py
 
 # Sync a single resource
-docker exec safehoods-dev python sync/sync.py invoice
+docker exec hoodsbase-dev python sync/sync.py invoice
 
 # Force full re-pull of a resource
-docker exec safehoods-dev python sync/sync.py invoice --full
+docker exec hoodsbase-dev python sync/sync.py invoice --full
 
 # Stop the container
 docker compose down

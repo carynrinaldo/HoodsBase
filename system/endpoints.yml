@@ -1,4 +1,4 @@
-# ServiceTrade API endpoints for SafeHoods
+# ServiceTrade API endpoints for HoodsBase
 #
 # Source of truth for rebuilding mappings.yml from scratch.
 # Usage: python system/rebuild_mappings.py

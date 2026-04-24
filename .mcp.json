@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "safehoods": {
-      "command": "python",
-      "args": ["mcp/server.py"]
+    "hoodsbase": {
+      "command": "docker",
+      "args": ["exec", "-i", "hoodsbase-dev", "python", "/app/mcp/server.py"]
     }
   }
 }

@@ -34,7 +34,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MAPPINGS_PATH = os.path.join(ROOT, "schema", "mappings.yml")
 CONTEXT_PATH = os.path.join(ROOT, "schema", "context.yml")
 ENDPOINTS_PATH = os.path.join(ROOT, "system", "endpoints.yml")
-DB_PATH = os.path.join(ROOT, "data", "safehoods.db")
+DB_PATH = os.path.join(ROOT, "data", "hoodsbase.db")
 TOKEN_FILE = os.path.join(ROOT, ".session_token")
 ENV_FILE = os.path.join(ROOT, ".env")
 
@@ -671,7 +671,7 @@ def main():
     args = parser.parse_args()
 
     logger.info("=" * 60)
-    logger.info("SafeHoods Sync")
+    logger.info("HoodsBase Sync")
     logger.info("=" * 60)
 
     # Load config

@@ -2,7 +2,7 @@
 
 ## Why ODBC?
 
-The SafeHoods SQLite database is the single source of truth for all business data synced from ServiceTrade. ODBC (Open Database Connectivity) lets the CFO query this database directly from Excel and Access — tools he already knows — without going through Claude or any custom interface.
+The HoodsBase SQLite database is the single source of truth for all business data synced from ServiceTrade. ODBC (Open Database Connectivity) lets the CFO query this database directly from Excel and Access — tools he already knows — without going through Claude or any custom interface.
 
 Combined with saved views (see [saved-views.md](saved-views.md)), this gives the CFO a self-service reporting layer on top of live business data.
 
@@ -49,15 +49,15 @@ A DSN (Data Source Name) is a saved connection profile that points to your `.db`
 2. Click the **User DSN** tab → **Add**
 3. Select **SQLite3 ODBC Driver** from the list → **Finish**
 4. Configure the DSN:
-   - **Data Source Name:** `SafeHoods`
-   - **Database Name:** Browse to the `.db` file location (e.g., `C:\SafeHoods\data\safehoods.db`)
+   - **Data Source Name:** `HoodsBase`
+   - **Database Name:** Browse to the `.db` file location (e.g., `C:\Users\caryn\Projects\HoodsBase\data\hoodsbase.db`)
    - **Flags:** Check "Read Only" — this prevents accidental writes from Excel/Access
 5. Click **OK**
 
 ## Connecting from Excel
 
 1. Open Excel → **Data** tab → **Get Data** → **From Other Sources** → **From ODBC**
-2. Select the `SafeHoods` DSN → **OK**
+2. Select the `HoodsBase` DSN → **OK**
 3. The Navigator panel shows all tables and views in the database
 4. Saved report views (prefixed with `report_`) appear alongside regular tables
 5. Select the table or view you want → **Load** (for direct import) or **Transform Data** (to filter/reshape in Power Query first)
@@ -68,7 +68,7 @@ To refresh data later: **Data** tab → **Refresh All**
 
 1. Open Access → **External Data** tab → **New Data Source** → **From Other Sources** → **ODBC Database**
 2. Choose **Link to the data source by creating a linked table**
-3. Select the `SafeHoods` DSN on the **Machine Data Source** tab
+3. Select the `HoodsBase` DSN on the **Machine Data Source** tab
 4. Select the tables/views to link → **OK**
 5. Linked tables appear in the Access navigation pane with a globe icon
 6. Build queries, forms, and reports on top of them as if they were native Access tables

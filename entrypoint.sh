@@ -1,9 +1,9 @@
 #!/bin/sh
 set -e
 
-echo "SafeHoods — starting up"
+echo "HoodsBase — starting up"
 
-# Parse system/schedule.yml and write /etc/cron.d/safehoods
+# Parse system/schedule.yml and write /etc/cron.d/hoodsbase
 python3 /app/system/write_crontab.py
 
 # Ensure the logs directory exists

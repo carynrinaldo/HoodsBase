@@ -1,6 +1,6 @@
-# mcp/ — SafeHoods MCP Server
+# mcp/ — HoodsBase MCP Server
 
-Gives Claude read-only access to the SafeHoods SQLite database. Claude connects to this server, receives the full annotated database schema as context, and uses the tools here to answer the CFO's business questions in natural language.
+Gives Claude read-only access to the HoodsBase SQLite database. Claude connects to this server, receives the full annotated database schema as context, and uses the tools here to answer the CFO's business questions in natural language.
 
 ## Files
 
@@ -18,7 +18,7 @@ The server enforces read-only access: only `SELECT` and `WITH` statements are ac
 
 | Tool | Description |
 |------|-------------|
-| `execute_query(sql)` | Run a SELECT query against `data/safehoods.db`. Returns a JSON array of row objects. |
+| `execute_query(sql)` | Run a SELECT query against `data/hoodsbase.db`. Returns a JSON array of row objects. |
 | `get_sync_status()` | Return last sync time and record count per resource from `sync_status`. Use this to tell the user how fresh the data is. |
 | `run_sync(resource, full)` | Run a data sync from ServiceTrade. Defaults to incremental sync of all resources. Pass a resource name to sync one, or `full=True` to re-pull everything. Returns the sync summary. |
 | `get_schema()` | Return the raw `schema.sql` text. Rarely needed — the schema is already in the system prompt. |
@@ -35,7 +35,7 @@ python mcp/server.py
 Or inside the Docker container:
 
 ```bash
-docker exec safehoods-dev python /app/mcp/server.py
+docker exec hoodsbase-dev python /app/mcp/server.py
 ```
 
 ### Connecting from Claude Desktop
@@ -45,9 +45,9 @@ Add an entry to your Claude Desktop `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "safehoods": {
+    "hoodsbase": {
       "command": "docker",
-      "args": ["exec", "-i", "safehoods-dev", "python", "/app/mcp/server.py"]
+      "args": ["exec", "-i", "hoodsbase-dev", "python", "/app/mcp/server.py"]
     }
   }
 }
@@ -57,10 +57,10 @@ The container must be running (`docker compose up -d`) before Claude Desktop con
 
 ## Prerequisites
 
-- `data/safehoods.db` must exist and be populated. Run the sync first if it doesn't:
+- `data/hoodsbase.db` must exist and be populated. Run the sync first if it doesn't:
   ```bash
-  docker exec safehoods-dev python system/create_db.py
-  docker exec safehoods-dev python sync/sync.py
+  docker exec hoodsbase-dev python system/create_db.py
+  docker exec hoodsbase-dev python sync/sync.py
   ```
 - The `mcp[cli]` package must be installed (included in the Dockerfile).
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SafeHoods MCP Server — gives Claude read-only access to the business database."""
+"""hoodsbase MCP Server — gives Claude read-only access to the business database."""
 
 import json
 import logging
@@ -15,7 +15,7 @@ from mcp.server.fastmcp import FastMCP
 # Constants
 # ---------------------------------------------------------------------------
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DB_PATH = os.path.join(ROOT, "data", "safehoods.db")
+DB_PATH = os.path.join(ROOT, "data", "hoodsbase.db")
 SCHEMA_PATH = os.path.join(ROOT, "schema", "schema.sql")
 LOG_PATH = os.path.join(ROOT, "logs", "pipeline.log")
 DEFAULT_ROW_LIMIT = 1000
@@ -23,7 +23,7 @@ DEFAULT_ROW_LIMIT = 1000
 # All logging to stderr — stdout is the JSON-RPC channel
 logging.basicConfig(stream=sys.stderr, level=logging.INFO,
                     format="%(asctime)s [%(levelname)s] %(message)s")
-log = logging.getLogger("safehoods-mcp")
+log = logging.getLogger("hoodsbase-mcp")
 
 # ---------------------------------------------------------------------------
 # Database helper
@@ -145,19 +145,19 @@ You have read-only access to a SQLite database synced nightly from ServiceTrade.
 # ---------------------------------------------------------------------------
 # MCP Server
 # ---------------------------------------------------------------------------
-mcp = FastMCP("safehoods", instructions=INSTRUCTIONS)
+mcp = FastMCP("hoodsbase", instructions=INSTRUCTIONS)
 
 
-@mcp.resource("safehoods://schema")
+@mcp.resource("hoodsbase://schema")
 def schema_resource() -> str:
-    """The annotated SafeHoods database schema."""
+    """The annotated hoodsbase database schema."""
     with open(SCHEMA_PATH) as f:
         return f.read()
 
 
 @mcp.tool()
 def execute_query(sql: str) -> str:
-    """Run a read-only SQL query against the SafeHoods database.
+    """Run a read-only SQL query against the hoodsbase database.
 
     Returns results as a JSON array of objects. Only SELECT statements are
     allowed. A default LIMIT of 1000 rows is applied if none is specified.

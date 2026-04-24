@@ -4,7 +4,7 @@ Runs all steps in order:
   1. rebuild_mappings.py  — endpoints.yml → mappings.yml  (live API calls)
   2. rebuild_context.py   — mappings.yml + api_knowledge.yml → context.yml
   3. generate_schema.py   — mappings.yml + context.yml → schema.sql
-  4. generate_views.py    — context.yml → v_ views in safehoods.db
+  4. generate_views.py    — context.yml → v_ views in hoodsbase.db
 
 Usage: python system/rebuild_all.py [--skip-mappings]
 
@@ -64,7 +64,7 @@ def main():
     )
 
     # Views require the database to exist
-    db_path = os.path.join(base, "data", "safehoods.db")
+    db_path = os.path.join(base, "data", "hoodsbase.db")
     if os.path.exists(db_path):
         steps.append(
             ("Generate views in database", ["schema/generate_views.py"])

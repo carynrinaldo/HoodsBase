@@ -76,7 +76,7 @@ The schema is generated via a four-stage pipeline (see `system/README.md` for de
 1. `system/rebuild_mappings.py` — calls the live API and writes `schema/mappings.yml` (field structure, pagination, child resource annotations)
 2. `system/rebuild_context.py` — merges `mappings.yml` with `system/api_knowledge.yml` (curated business context and type rules) to produce `schema/context.yml`
 3. `schema/generate_schema.py` — reads `mappings.yml` + `context.yml` and produces `schema/schema.sql`
-4. `system/create_db.py` — reads `schema/schema.sql` + `system/db_settings.yml` and creates `data/safehoods.db`
+4. `system/create_db.py` — reads `schema/schema.sql` + `system/db_settings.yml` and creates `data/hoodsbase.db`
 
 `schema.sql` is deliberately kept as clean DDL — no pragmas, no `IF NOT EXISTS`, no runtime settings — because it doubles as Claude's MCP system prompt (~3,300 tokens). Runtime database settings (WAL mode, create behavior) are configured in `system/db_settings.yml` and applied by `create_db.py` when creating the actual database. This separation keeps the MCP prompt free of noise while allowing database behavior to be changed without regenerating the schema.
 
@@ -141,7 +141,7 @@ A Model Context Protocol server that sits on top of SQLite and exposes tools tha
 ## Project Structure
 
 ```
-SafeHoods/
+HoodsBase/
 ├── system/                  # Pipeline source-of-truth files & database setup
 │   ├── endpoints.yml        # API endpoints to explore
 │   ├── api_knowledge.yml    # Curated business context & type rules
@@ -149,9 +149,9 @@ SafeHoods/
 │   ├── rebuild_mappings.py  # Live API → mappings.yml
 │   ├── rebuild_context.py   # mappings + knowledge → context.yml
 │   ├── rebuild_all.py       # Orchestrates the full pipeline
-│   ├── create_db.py         # schema.sql + db_settings.yml → safehoods.db
+│   ├── create_db.py         # schema.sql + db_settings.yml → hoodsbase.db
 │   ├── schedule.yml         # Sync schedule config — edit this to change run time
-│   └── write_crontab.py     # Generates /etc/cron.d/safehoods at container startup
+│   └── write_crontab.py     # Generates /etc/cron.d/hoodsbase at container startup
 ├── schema/                  # Generated schema files
 │   ├── mappings.yml         # Auto-generated API field structure
 │   ├── context.yml          # Auto-generated business context (from api_knowledge.yml)

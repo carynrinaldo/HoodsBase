@@ -17,7 +17,7 @@ Rather than building the full ServiceTrade sync system upfront, we're taking an 
 - Base image: `python:3.12-slim`
 - Initial dependencies: `requests` (for API calls), `sqlite3` (built-in)
 - Bind-mount the project directory so we can edit files from outside the container
-- Container name: `safehoods-dev`
+- Container name: `hoodsbase-dev`
 
 ### 2. Authenticate — Done
 
@@ -75,7 +75,7 @@ For each resource in priority order:
 - Empty tables skipped (region, tax_rate with 0 records/0 fields)
 - `TABLE_NAME_MAP` handles compound names (`invoiceitem` → `invoice_item`, `quoteitem` → `quote_item`, `servicerecurrence` → `service_recurrence`, `paymentterms` → `payment_terms`, `taxrate` → `tax_rate`)
 - Appends admin tables (`sync_status`, `sync_log`) at the end
-- Run: `docker exec safehoods-dev python /app/schema/generate_schema.py`
+- Run: `docker exec hoodsbase-dev python /app/schema/generate_schema.py`
 
 Current output: 18 tables (3 static + 13 core + 2 admin)
 

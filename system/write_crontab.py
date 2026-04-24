@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reads system/schedule.yml and writes /etc/cron.d/safehoods.
+"""Reads system/schedule.yml and writes /etc/cron.d/hoodsbase.
 
 Called by entrypoint.sh at container startup. Validates the sync_time
 value and generates the cron entry. Exits non-zero on bad config so the
@@ -13,7 +13,7 @@ import sys
 import yaml
 
 SCHEDULE_PATH = "/app/system/schedule.yml"
-CRON_PATH = "/etc/cron.d/safehoods"
+CRON_PATH = "/etc/cron.d/hoodsbase"
 
 with open(SCHEDULE_PATH) as f:
     config = yaml.safe_load(f)

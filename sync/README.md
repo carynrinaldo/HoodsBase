@@ -1,6 +1,6 @@
 # sync/ — ServiceTrade API Sync
 
-Pulls data from the ServiceTrade API into `data/safehoods.db`. Driven entirely by YAML configuration — no per-resource Python code.
+Pulls data from the ServiceTrade API into `data/hoodsbase.db`. Driven entirely by YAML configuration — no per-resource Python code.
 
 For end-to-end operational procedures including add/remove endpoints and full recovery, see [docs/runbooks.md](../docs/runbooks.md).
 
@@ -78,7 +78,7 @@ Wipes all data and re-syncs from scratch (~90–100 seconds). This resets data o
 
 ```bash
 # Recreate empty database
-rm data/safehoods.db data/safehoods.db-wal data/safehoods.db-shm
+rm data/hoodsbase.db data/hoodsbase.db-wal data/hoodsbase.db-shm
 python system/create_db.py
 
 # Full backfill (~90-100 seconds)
@@ -211,10 +211,10 @@ All sync activity is written to `logs/pipeline.log` — timestamped, structured 
 docker compose logs -f
 
 # View recent entries directly
-docker exec safehoods-dev tail -100 logs/pipeline.log
+docker exec hoodsbase-dev tail -100 logs/pipeline.log
 
 # Filter to errors and warnings
-docker exec safehoods-dev grep -E " (ERROR|WARNING) " logs/pipeline.log
+docker exec hoodsbase-dev grep -E " (ERROR|WARNING) " logs/pipeline.log
 ```
 
 The log rotates automatically at 5 MB, keeping 5 backups. Claude can also read it during a conversation via the MCP `read_log()` tool.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create the SafeHoods SQLite database from schema.sql."""
+"""Create the HoodsBase SQLite database from schema.sql."""
 
 import glob
 import os
@@ -18,7 +18,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCHEMA_PATH = os.path.join(ROOT, "schema", "schema.sql")
 SETTINGS_PATH = os.path.join(ROOT, "system", "db_settings.yml")
 DB_DIR = os.path.join(ROOT, "data")
-DB_PATH = os.path.join(DB_DIR, "safehoods.db")
+DB_PATH = os.path.join(DB_DIR, "hoodsbase.db")
 REPORTS_DIR = os.path.join(ROOT, "reports")
 
 

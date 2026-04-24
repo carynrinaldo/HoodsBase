@@ -1,4 +1,4 @@
-"""Shared logging configuration for all SafeHoods pipeline scripts.
+"""Shared logging configuration for all HoodsBase pipeline scripts.
 
 Configures two handlers on the root logger (once, on first call):
   - RotatingFileHandler → logs/pipeline.log  (5 MB max, 5 backups)

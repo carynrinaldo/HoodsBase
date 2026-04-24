@@ -20,7 +20,7 @@ from utils.logging_config import get_logger
 logger = get_logger(__name__)
 
 CONTEXT_FILE = "context.yml"
-DB_FILE = os.path.join("data", "safehoods.db")
+DB_FILE = os.path.join("data", "hoodsbase.db")
 
 # Same map as generate_schema.py
 TABLE_NAME_MAP = {

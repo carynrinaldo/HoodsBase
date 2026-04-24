@@ -19,7 +19,7 @@ This directory contains the auto-generated database schema and the scripts that 
 Produces `schema.sql` from the two YAML files. The output is deliberately kept as clean DDL — no pragmas, no `IF NOT EXISTS`, no runtime settings — because it doubles as Claude's MCP system prompt. Inline comments are limited to enums and non-obvious semantics.
 
 ```bash
-docker exec safehoods-dev python /app/schema/generate_schema.py
+docker exec hoodsbase-dev python /app/schema/generate_schema.py
 ```
 
 ### generate_views.py
@@ -27,7 +27,7 @@ docker exec safehoods-dev python /app/schema/generate_schema.py
 Creates `v_` views in the live database for every table that has timestamp fields. Each view selects all base columns plus `datetime(col, 'unixepoch', 'localtime') AS col_dt` for each timestamp column. Idempotent — uses `DROP VIEW IF EXISTS` before each `CREATE VIEW`.
 
 ```bash
-docker exec safehoods-dev python /app/schema/generate_views.py
+docker exec hoodsbase-dev python /app/schema/generate_views.py
 ```
 
 **Views created (12):** `v_company`, `v_location`, `v_contact`, `v_job`, `v_appointment`, `v_invoice`, `v_invoice_item`, `v_quote`, `v_asset`, `v_deficiency`, `v_service_recurrence`, `v_user`
