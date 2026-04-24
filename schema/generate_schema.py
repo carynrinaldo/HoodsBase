@@ -161,6 +161,35 @@ def generate_columns(mapping_fields, ctx_fields):
 
         # No _dt companion columns — convention documented in header
 
+    # Context-only fields: emit columns for fields declared in context.yml
+    # that don't exist in mappings.yml. These are typically populated by
+    # the sync code from sideloaded sub-responses (see sync/sync.py).
+    seen_api_names = set(mapping_fields.keys())
+    seen_db_columns = {c[0] for c in columns}
+    for api_name, ctx in ctx_fields.items():
+        if api_name in seen_api_names:
+            continue
+        if ctx.get("skip"):
+            continue
+        final_col = ctx.get("db_column", api_name)
+        if final_col in seen_db_columns:
+            continue
+        # For context-only fields, db_type must be explicitly set
+        # (we have no api_type to infer from)
+        db_type = ctx.get("db_type")
+        if not db_type:
+            continue
+        # Map context db_type to SQL type — same logic as sql_type() but
+        # without an api_type to fall back on
+        sql_t = {
+            "integer": "INTEGER",
+            "real": "REAL",
+            "text": "TEXT",
+            "timestamp": "INTEGER",
+        }.get(db_type, "TEXT")
+        comment = ctx.get("prompt_comment")
+        columns.append((final_col, sql_t, comment))
+
     return columns
 
 

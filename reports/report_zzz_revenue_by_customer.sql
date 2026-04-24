@@ -1,8 +1,8 @@
--- name: report_revenue_by_customer
+-- name: report_zzz_revenue_by_customer
 -- description: Total revenue by customer across all non-void invoices, ranked highest to lowest.
--- created_at: 2026-03-20T21:20:39Z
-DROP VIEW IF EXISTS report_revenue_by_customer;
-CREATE VIEW report_revenue_by_customer AS
+-- created_at: 2026-04-24T23:05:22Z
+DROP VIEW IF EXISTS report_zzz_revenue_by_customer;
+CREATE VIEW report_zzz_revenue_by_customer AS
 SELECT
   c.name AS customer,
   c.status AS customer_status,

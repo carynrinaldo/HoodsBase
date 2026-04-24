@@ -1,8 +1,8 @@
--- name: report_visits
+-- name: report_zzz_visits
 -- description: All completed jobs by customer for 2024 and 2025, showing individual visit records with job number, customer, location, and completed date.
--- created_at: 2026-03-20T05:34:14Z
-DROP VIEW IF EXISTS report_visits;
-CREATE VIEW report_visits AS
+-- created_at: 2026-04-24T23:11:47Z
+DROP VIEW IF EXISTS report_zzz_visits;
+CREATE VIEW report_zzz_visits AS
 SELECT
   j.id AS job_id,
   j.number AS job_number,

@@ -1,8 +1,8 @@
--- name: report_technician_workload
+-- name: report_zzz_technician_workload
 -- description: Technician workload summary — completed jobs and appointments per user.
--- created_at: 2026-03-20T21:21:08Z
-DROP VIEW IF EXISTS report_technician_workload;
-CREATE VIEW report_technician_workload AS
+-- created_at: 2026-04-24T23:08:03Z
+DROP VIEW IF EXISTS report_zzz_technician_workload;
+CREATE VIEW report_zzz_technician_workload AS
 SELECT
   u.name AS technician,
   u.email,

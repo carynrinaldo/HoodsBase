@@ -1,8 +1,8 @@
--- name: report_asset_inventory
+-- name: report_zzz_asset_inventory
 -- description: Equipment/asset inventory by location and service line, showing active assets with their type and properties.
--- created_at: 2026-03-20T21:22:02Z
-DROP VIEW IF EXISTS report_asset_inventory;
-CREATE VIEW report_asset_inventory AS
+-- created_at: 2026-04-24T23:00:00Z
+DROP VIEW IF EXISTS report_zzz_asset_inventory;
+CREATE VIEW report_zzz_asset_inventory AS
 SELECT
   c.name AS customer,
   l.name AS location,

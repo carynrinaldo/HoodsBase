@@ -1,8 +1,8 @@
--- name: report_open_deficiencies
+-- name: report_zzz_open_deficiencies
 -- description: Locations with open deficiencies that have not been resolved or fixed, including severity and days open.
--- created_at: 2026-03-20T20:54:47Z
-DROP VIEW IF EXISTS report_open_deficiencies;
-CREATE VIEW report_open_deficiencies AS
+-- created_at: 2026-04-24T23:03:25Z
+DROP VIEW IF EXISTS report_zzz_open_deficiencies;
+CREATE VIEW report_zzz_open_deficiencies AS
 SELECT
   c.name AS customer,
   l.name AS location,

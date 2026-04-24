@@ -1,8 +1,8 @@
--- name: report_deficiency_severity_by_customer
+-- name: report_zzz_deficiency_severity_by_customer
 -- description: Deficiency severity breakdown by customer — counts of suggested, deficient, and inoperable findings.
--- created_at: 2026-03-20T21:21:23Z
-DROP VIEW IF EXISTS report_deficiency_severity_by_customer;
-CREATE VIEW report_deficiency_severity_by_customer AS
+-- created_at: 2026-04-24T23:01:17Z
+DROP VIEW IF EXISTS report_zzz_deficiency_severity_by_customer;
+CREATE VIEW report_zzz_deficiency_severity_by_customer AS
 SELECT
   c.name AS customer,
   CAST(COUNT(d.id) AS INTEGER) AS total_deficiencies,

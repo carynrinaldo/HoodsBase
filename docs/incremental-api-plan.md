@@ -187,3 +187,123 @@ The API-to-database relationship is captured in a pipeline with one human-edited
 - `skip` directives (arrays handled via join tables, deprecated fields)
 
 Together they produce `schema/schema.sql` and drive the sync script's field transformations. See `system/README.md` for full pipeline documentation.
+
+
+## Add `service_request` endpoint (2026-04-24)
+
+Mid-session addition driven by reporting needs — Rick's hood-cleaning report
+needs job-level service prices, which live on `service_request` records (one
+per job+service). These are derived from `service_recurrence` templates but
+diverge over time as prices change, since each `service_request` is a
+copy frozen at job creation time.
+
+**Three-table cascade discovered:**
+
+```
+service_recurrence   — location-level template (frequency, interval, price)
+    ↓ (copied when a job is scheduled)
+service_request      — job-level instance (per job+service)
+    ↓ (copied when the job is invoiced)
+invoice_item         — billing-level line item
+```
+
+Each level has its own `description`, `estimated_price`/`price`, and date
+fields. Prices are frozen at copy time — this is why historical jobs at the
+same location can show different prices than the current recurrence template.
+
+**Notes on adding the endpoint:**
+
+- Added `servicerequest` to `system/endpoints.yml` (no `required_params` — works on default fetch)
+- Added a `servicerequestitem` block to `api_knowledge.yml` with `skip_resource: true` — the child line items are sparse (just id/uri/description) and not needed in the schema
+- `TABLE_NAME_MAP` in three files needed updating: `sync/sync.py`, `schema/generate_schema.py`, `schema/generate_views.py` (each script holds its own copy for self-containment). The map needs `"servicerequest": "service_request"` so the table gets created with the underscore.
+- Initial sync produced 14,575 records spanning Sep 2016 to April 2026 (≈3 pages of 5,000)
+- Status breakdown: 8,369 tied to a job, 6,206 unassigned (open future obligations)
+
+## `serviceRecurrence.nextDueService` sideload (2026-04-24)
+
+The "Currently Due" date that ServiceTrade shows on each location's Services
+section was missing from our database. The recurrence's `firstStart` field
+is the *initial* start of the schedule — not the next-due date that the UI
+displays. The next-due date can be manually edited by the user in the UI
+(it persists), so it must live somewhere — but it isn't on the recurrence
+record's default response.
+
+**The discovery:** ServiceTrade exposes the next-due date through a
+**sideload** mechanism. Adding `?_sideload=serviceRecurrence.nextDueService`
+to the recurrence endpoint causes the response to include a related
+`serviceRequests` section alongside the primary `serviceRecurrence`
+section. The sideloaded service request's `windowStart` is the date
+ServiceTrade considers "Currently Due" — including any manual edits.
+
+**Synthetic vs. real sideloaded records:**
+
+- If a real upcoming `service_request` exists for the recurrence (real job
+  created), the sideload returns it with its real positive ID.
+- If no real upcoming service request exists yet (no job created), ServiceTrade
+  fabricates a synthetic one in the response. Synthetic records have negative
+  IDs — specifically, the negation of the parent recurrence's id. Example:
+  recurrence id `5335899` → synthetic service request id `-5335899`.
+
+We do not store the synthetic records as rows in `service_request`. We
+extract `windowStart` from them and write it to a new column on the
+parent `service_recurrence` row.
+
+**Parent/child recurrence pattern (CRITICAL for filtering active records):**
+
+When a recurrence is materially edited in the UI — particularly a price
+change — ServiceTrade does NOT update the existing record in place. It:
+
+1. Stamps the old record with `ends_on = today` (retiring it)
+2. Creates a new record with the new values
+3. Sets the new record's `parent` to the old record's id
+4. Sets the old record's `currentServiceRecurrence` to the new record's id
+
+This preserves history (old jobs that were created at the old price still
+have a recurrence to point back to) while signaling which version is now
+authoritative.
+
+**Empirically observed:** different kinds of edits trigger different
+behavior. A price change DOES create a new parent/child pair. A manual
+"Currently Due" date edit does NOT — it just updates the existing record
+in place. Cadence changes have not been tested.
+
+**Filtering active recurrences requires BOTH:**
+
+```sql
+WHERE id = current_service_recurrence_id   -- not superseded by a newer record
+  AND ends_on IS NULL                      -- not explicitly retired
+```
+
+Either filter alone misses cases. Together they correctly identify only
+the live, in-effect recurrences. Empirically tested on HabitBurger -
+Issaquah and Turmeric Kitchen, where each had two records with `id =
+current_service_recurrence_id` but only one had `ends_on IS NULL`.
+
+**Implementation in this codebase:**
+
+- New `sideload` block added to the `servicerecurrence` entry in `system/endpoints.yml` (with explanatory comment)
+- New `currently_due` and `currentServiceRecurrence` field overrides in `system/api_knowledge.yml` (with explanatory description on the resource block)
+- `schema/generate_schema.py` extended to emit columns for fields declared in `context.yml` that don't appear in `mappings.yml` (sideload-derived fields, like `currently_due`)
+- New `get_sideload()` helper in `sync/sync.py` parallel to `get_required_params()`
+- `fetch_all_pages()` updated to return a 4th value: a `sideloads` dict mapping section name → list of sideloaded records collected across all pages
+- `sync_resource()` now passes `_sideload` as a request param when configured, then matches sideloaded service requests to parent recurrences (by `serviceRecurrence` field for real records, by negative-id mirror for synthetics) and injects `windowStart` as a `currentlyDue` field that the standard `transform_record()` picks up via the `api_knowledge.yml` override.
+
+**Initial backfill results:**
+
+- 4,495 service recurrences synced
+- 1,195 of them have `currently_due` populated (active recurrences with projected upcoming work)
+- 949 are "active" by the `id = current_service_recurrence_id` filter
+- 3,546 are "superseded" (older versions with `current_service_recurrence_id` pointing forward to a newer record)
+
+**First production reports built on this:**
+
+- `report_primary_hood_next_service` — 189 active locations (active company + active location + non-superseded + non-retired Primary Main Hood recurrence) with last-completed date, recurrence frequency/interval/price, and full date+time of next due (date from `currently_due`, time-of-day from `preferred_start_time`)
+- `report_qual_primary_hood_duplicates` — data quality safety net; should be 0 rows. If it ever returns rows, those locations have orphaned/duplicate Primary Main Hood recurrences in ServiceTrade that need cleanup. Currently returns 0.
+
+## Updated record counts (2026-04-24, after Step 6.5)
+
+| Table | Records | Change |
+|-------|---------|--------|
+| service_request | 14,575 | NEW |
+| service_recurrence | 4,495 | unchanged count, +2 columns (currently_due, current_service_recurrence_id) |
+| (other tables unchanged) | | |

@@ -315,7 +315,7 @@ CREATE TABLE deficiency (
   external_ids TEXT
 );
 
--- Recurring service schedule — critical for compliance. Defines how often a location/asset needs service. frequency+interval = "every [interval] [frequency]s" e.g. interval=3, frequency=monthly means quarterly.
+-- Recurring service schedule — critical for compliance. Defines how often a location/asset needs service. frequency+interval = "every [interval] [frequency]s" e.g. interval=3, frequency=monthly means quarterly. The `currently_due` and `current_service_recurrence_id` columns are populated via the `serviceRecurrence.nextDueService` sideload (see system/endpoints.yml). When a user manually edits the "Currently Due" date in the ServiceTrade UI, ServiceTrade creates a NEW recurrence record with the new date and links the old one via `current_service_recurrence_id`. The active recurrence for any location is the one where `id = current_service_recurrence_id`.
 CREATE TABLE service_recurrence (
   id INTEGER PRIMARY KEY,
   description TEXT,
@@ -337,7 +337,9 @@ CREATE TABLE service_recurrence (
   duration INTEGER,  -- seconds
   preferred_start_time INTEGER,  -- seconds from midnight
   created_at INTEGER,
-  updated_at INTEGER
+  updated_at INTEGER,
+  currently_due INTEGER,  -- next due date from ServiceTrade UI; matches Currently Due column
+  current_service_recurrence_id INTEGER  -- FK to currently active recurrence; equals id when this row is the active one
 );
 
 -- Job-level service request — a specific item of work to be done (e.g. "Kitchen exhaust hood cleaning"). Derived from service recurrences, referenced by invoice_item and quote_item via service_request_id. Distinct from service_recurrence (location template) and invoice_item (billing line).

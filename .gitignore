@@ -6,3 +6,4 @@ data/
 __pycache__/
 logs/*.log
 logs/*.log.*
+*.csv 

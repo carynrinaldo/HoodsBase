@@ -1,8 +1,8 @@
--- name: report_quote_acceptance
+-- name: report_zzz_quote_acceptance
 -- description: Quote acceptance rate by customer — submitted quotes versus accepted, rejected, and still pending.
--- created_at: 2026-03-20T21:21:41Z
-DROP VIEW IF EXISTS report_quote_acceptance;
-CREATE VIEW report_quote_acceptance AS
+-- created_at: 2026-04-24T23:04:40Z
+DROP VIEW IF EXISTS report_zzz_quote_acceptance;
+CREATE VIEW report_zzz_quote_acceptance AS
 SELECT
   c.name AS customer,
   CAST(COUNT(q.id) AS INTEGER) AS total_quotes,

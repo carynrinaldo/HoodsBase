@@ -1,8 +1,8 @@
--- name: report_jobs_without_invoice
+-- name: report_zzz_jobs_without_invoice
 -- description: Completed jobs that have no associated invoice — work done but not billed.
--- created_at: 2026-03-20T20:54:24Z
-DROP VIEW IF EXISTS report_jobs_without_invoice;
-CREATE VIEW report_jobs_without_invoice AS
+-- created_at: 2026-04-24T23:02:00Z
+DROP VIEW IF EXISTS report_zzz_jobs_without_invoice;
+CREATE VIEW report_zzz_jobs_without_invoice AS
 SELECT
   c.name AS customer,
   l.name AS location,

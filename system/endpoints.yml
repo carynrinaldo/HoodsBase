@@ -28,5 +28,14 @@ resources:
   - endpoint: servicerecurrence
     required_params:
       updatedAfter: 946684800    # 2000-01-01 — returns 0 records without this
+    # Sideload: tells the API to include the projected next-due service request
+    # alongside each recurrence in the same response (no extra HTTP call).
+    # The sideloaded record's windowStart becomes the `currently_due` column on
+    # service_recurrence — this captures whatever date ServiceTrade considers
+    # authoritative for the next service, including any manual edits made in
+    # the UI.  See system/api_knowledge.yml (servicerecurrence block) for the
+    # field-level mapping.  Implemented in sync/sync.py.
+    sideload:
+      - serviceRecurrence.nextDueService
   - endpoint: servicerequest
   - endpoint: user

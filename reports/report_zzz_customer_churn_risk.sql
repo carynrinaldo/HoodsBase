@@ -1,8 +1,8 @@
--- name: report_customer_churn_risk
+-- name: report_zzz_customer_churn_risk
 -- description: Customers who had completed jobs in 2023 or 2024 but have no completed or scheduled jobs in 2025 — potential churn.
--- created_at: 2026-03-20T20:55:10Z
-DROP VIEW IF EXISTS report_customer_churn_risk;
-CREATE VIEW report_customer_churn_risk AS
+-- created_at: 2026-04-24T23:00:59Z
+DROP VIEW IF EXISTS report_zzz_customer_churn_risk;
+CREATE VIEW report_zzz_customer_churn_risk AS
 SELECT
   c.name AS customer,
   c.status AS customer_status,

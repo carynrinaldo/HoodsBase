@@ -1,8 +1,8 @@
--- name: report_jobs_pending_invoice
+-- name: report_zzz_jobs_pending_invoice
 -- description: Jobs stuck in pending_invoice or sending_invoice status — completed work that hasn't been billed yet.
--- created_at: 2026-03-20T20:54:12Z
-DROP VIEW IF EXISTS report_jobs_pending_invoice;
-CREATE VIEW report_jobs_pending_invoice AS
+-- created_at: 2026-04-24T23:01:38Z
+DROP VIEW IF EXISTS report_zzz_jobs_pending_invoice;
+CREATE VIEW report_zzz_jobs_pending_invoice AS
 SELECT
   c.name AS customer,
   l.name AS location,

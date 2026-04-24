@@ -517,6 +517,14 @@ resource_overrides:
       often a location/asset needs service. frequency+interval = "every
       [interval] [frequency]s" e.g. interval=3, frequency=monthly means
       quarterly.
+      
+      The `currently_due` and `current_service_recurrence_id` columns
+      are populated via the `serviceRecurrence.nextDueService` sideload
+      (see system/endpoints.yml). When a user manually edits the
+      "Currently Due" date in the ServiceTrade UI, ServiceTrade creates
+      a NEW recurrence record with the new date and links the old one
+      via `current_service_recurrence_id`. The active recurrence for
+      any location is the one where `id = current_service_recurrence_id`.
     fields:
       repeatWeekday:
         db_column: repeat_weekday
@@ -555,6 +563,14 @@ resource_overrides:
         db_column: preferred_vendor_id
         db_type: integer
         extract_key: id
+      # ── Sideload-derived fields (see system/endpoints.yml) ─────────
+      currently_due:
+        db_type: timestamp
+        prompt_comment: "next due date from ServiceTrade UI; matches Currently Due column"
+      currentServiceRecurrence:
+        db_column: current_service_recurrence_id
+        db_type: integer
+        prompt_comment: "FK to currently active recurrence; equals id when this row is the active one"
 
   servicerecurrenceitem:
     description: >

@@ -1,8 +1,8 @@
--- name: report_avg_days_to_payment
+-- name: report_zzz_avg_days_to_payment
 -- description: Average days from invoice transaction date to paid status, by customer. Only includes invoices marked as paid.
--- created_at: 2026-03-20T21:20:29Z
-DROP VIEW IF EXISTS report_avg_days_to_payment;
-CREATE VIEW report_avg_days_to_payment AS
+-- created_at: 2026-04-24T23:00:25Z
+DROP VIEW IF EXISTS report_zzz_avg_days_to_payment;
+CREATE VIEW report_zzz_avg_days_to_payment AS
 SELECT
   c.name AS customer,
   CAST(COUNT(i.id) AS INTEGER) AS paid_invoices,

@@ -1,8 +1,8 @@
--- name: report_locations_no_recurrence
+-- name: report_zzz_locations_no_recurrence
 -- description: Active customer locations that have no service recurrence set up — being serviced ad hoc with no contracted schedule.
--- created_at: 2026-03-20T20:54:38Z
-DROP VIEW IF EXISTS report_locations_no_recurrence;
-CREATE VIEW report_locations_no_recurrence AS
+-- created_at: 2026-04-24T23:02:26Z
+DROP VIEW IF EXISTS report_zzz_locations_no_recurrence;
+CREATE VIEW report_zzz_locations_no_recurrence AS
 SELECT
   c.name AS customer,
   c.status AS customer_status,

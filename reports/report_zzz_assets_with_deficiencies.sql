@@ -1,8 +1,8 @@
--- name: report_assets_with_deficiencies
+-- name: report_zzz_assets_with_deficiencies
 -- description: Assets with active (unfixed) deficiencies, showing severity and how long the deficiency has been open.
--- created_at: 2026-03-20T20:55:36Z
-DROP VIEW IF EXISTS report_assets_with_deficiencies;
-CREATE VIEW report_assets_with_deficiencies AS
+-- created_at: 2026-04-24T23:00:12Z
+DROP VIEW IF EXISTS report_zzz_assets_with_deficiencies;
+CREATE VIEW report_zzz_assets_with_deficiencies AS
 SELECT
   c.name AS customer,
   l.name AS location,

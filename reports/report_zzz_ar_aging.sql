@@ -1,8 +1,8 @@
--- name: report_ar_aging
+-- name: report_zzz_ar_aging
 -- description: Accounts receivable aging report bucketed into current, 1-30, 31-60, 61-90, and 90+ day buckets by customer.
--- created_at: 2026-03-20T21:20:20Z
-DROP VIEW IF EXISTS report_ar_aging;
-CREATE VIEW report_ar_aging AS
+-- created_at: 2026-04-24T22:59:50Z
+DROP VIEW IF EXISTS report_zzz_ar_aging;
+CREATE VIEW report_zzz_ar_aging AS
 SELECT
   c.name AS customer,
   CAST(COUNT(i.id) AS INTEGER) AS invoice_count,

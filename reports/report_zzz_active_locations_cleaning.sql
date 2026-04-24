@@ -1,8 +1,8 @@
--- name: report_active_locations_cleaning
+-- name: report_zzz_active_locations_cleaning
 -- description: Active locations with KEC (Kitchen Exhaust Cleaning) service details, including last and next cleaning dates and service interval frequency.
--- created_at: 2026-04-23T00:20:14Z
-DROP VIEW IF EXISTS report_active_locations_cleaning;
-CREATE VIEW report_active_locations_cleaning AS
+-- created_at: 2026-04-24T22:59:29Z
+DROP VIEW IF EXISTS report_zzz_active_locations_cleaning;
+CREATE VIEW report_zzz_active_locations_cleaning AS
 WITH latest_recurrence AS (
   SELECT
     sr.location_id,

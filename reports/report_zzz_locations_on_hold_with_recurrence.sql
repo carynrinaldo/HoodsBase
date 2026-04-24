@@ -1,8 +1,8 @@
--- name: report_locations_on_hold_with_recurrence
+-- name: report_zzz_locations_on_hold_with_recurrence
 -- description: Locations with an on_hold status that still have active service recurrences — may need attention.
--- created_at: 2026-03-20T20:55:24Z
-DROP VIEW IF EXISTS report_locations_on_hold_with_recurrence;
-CREATE VIEW report_locations_on_hold_with_recurrence AS
+-- created_at: 2026-04-24T23:02:55Z
+DROP VIEW IF EXISTS report_zzz_locations_on_hold_with_recurrence;
+CREATE VIEW report_zzz_locations_on_hold_with_recurrence AS
 SELECT
   c.name AS customer,
   c.status AS customer_status,

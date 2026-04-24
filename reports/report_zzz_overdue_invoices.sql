@@ -1,8 +1,8 @@
--- name: report_overdue_invoices
+-- name: report_zzz_overdue_invoices
 -- description: All unpaid, non-void customer invoices where the due date has passed. Shows invoice number, customer name, balance due, due date, and days overdue — sorted by days overdue descending.
--- created_at: 2026-03-20T05:16:49Z
-DROP VIEW IF EXISTS report_overdue_invoices;
-CREATE VIEW report_overdue_invoices AS
+-- created_at: 2026-04-24T23:04:00Z
+DROP VIEW IF EXISTS report_zzz_overdue_invoices;
+CREATE VIEW report_zzz_overdue_invoices AS
 SELECT
   i.id,
   i.invoice_number,

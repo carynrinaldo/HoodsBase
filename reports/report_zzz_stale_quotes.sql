@@ -1,8 +1,8 @@
--- name: report_stale_quotes
+-- name: report_zzz_stale_quotes
 -- description: Open quotes (submitted or draft) that have not been acted on in 30+ days, potential stalled deals.
--- created_at: 2026-03-20T20:55:16Z
-DROP VIEW IF EXISTS report_stale_quotes;
-CREATE VIEW report_stale_quotes AS
+-- created_at: 2026-04-24T23:07:04Z
+DROP VIEW IF EXISTS report_zzz_stale_quotes;
+CREATE VIEW report_zzz_stale_quotes AS
 SELECT
   c.name AS customer,
   l.name AS location,

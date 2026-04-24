@@ -202,6 +202,21 @@ For the full procedure including dropping the table, see [docs/runbooks.md](../d
 2. Run `python system/rebuild_all.py --skip-mappings` — the table will no longer appear in `schema.sql` or `context.yml`, and the sync will ignore it going forward
 3. Optionally drop the table from the database (see runbooks). If you don't, the table sits there harmlessly. Note that `create_db.py` will not recreate a dropped table.
 
+## How to add a sideload to an endpoint
+
+A **sideload** is a ServiceTrade API parameter (`_sideload=`) that requests related records be returned alongside the primary records in a single response — avoiding a second HTTP call. Use this when a value visible in the ServiceTrade UI is not part of the default endpoint response but lives on a related record.
+
+The first sideload added to this codebase: `serviceRecurrence.nextDueService` on the servicerecurrence endpoint, to capture the "Currently Due" date that the UI shows for each location's services. See [docs/incremental-api-plan.md](../docs/incremental-api-plan.md) for the full discovery story (synthetic records with negative IDs, parent/child recurrence pattern, etc.).
+
+The schema pipeline steps:
+
+1. In `system/endpoints.yml`, add a `sideload:` block to the resource's entry, listing the sideload names (e.g. `serviceRecurrence.nextDueService`). Include an inline comment explaining what it does.
+2. In `system/api_knowledge.yml`, on the resource's `resource_overrides` block, add field entries for the sideload-derived columns. These are fields that don't exist in `mappings.yml` (since they're not in the default API response). They MUST have an explicit `db_type` so the schema generator knows how to type them. Include `prompt_comment` text and reference the sideload in the resource's `description`.
+3. The sync code in `sync/sync.py` already supports the sideload pattern via `get_sideload()` and the sideload-extraction logic in `sync_resource()`. If your sideload uses a new section name in the response (something other than `serviceRequests`), or needs different matching logic for parent records, the `sync_resource()` block that begins `if sideloads and resource == ...` will need to be extended.
+4. Run `python system/rebuild_all.py --skip-mappings` to regenerate `context.yml` and `schema.sql`. The new sideload-derived columns should appear in the table definition.
+5. The new columns won't be added to an existing table by `create_db.py` (which uses `create_if_not_exists`). Either back up and recreate the table, or run an `ALTER TABLE ADD COLUMN` for each new column.
+6. Run `python sync/sync.py <resource> --full` to populate the sideload-derived columns. Watch for the log line `[<table>] Sideload requested: <sideload_name>` and `[<table>] Matched currently_due for X/Y records (from N sideloaded records)` — these confirm the sideload is being requested and the matching is working.
+
 ## Debugging a single endpoint
 
 To inspect the raw API response and field analysis for one endpoint without rebuilding everything:

@@ -214,16 +214,31 @@ def check_budget(response_json, session):
 def fetch_all_pages(session, endpoint, params=None):
     """Fetch all pages from an API endpoint.
 
-    Returns (all_records, total_pages, last_budget_ms).
+    Returns (all_records, total_pages, last_budget_ms, sideloads).
+
+    `sideloads` is a dict mapping each sideloaded section name (e.g.
+    "serviceRequests") to a flat list of all sideloaded records collected
+    across all pages.  Empty dict if no sideloads are present in the
+    response.
+
+    The sideloaded sections appear alongside the primary records section
+    in the response. ServiceTrade returns them when the request includes
+    a `_sideload` parameter (see system/endpoints.yml). Sideloaded
+    sections are recognised as: any list-valued key in `data` that is
+    NOT the primary records list and NOT a pagination metadata key.
     """
     url = f"{BASE_URL}/{endpoint}"
     if params is None:
         params = {}
 
     all_records = []
+    sideloads = {}              # section_name -> list of sideloaded records
     page = 1
     total_pages = 1
     last_budget = None
+
+    # Pagination metadata keys that should never be treated as sideloads
+    pagination_keys = {"page", "totalPages", "totalCount", "pageSize"}
 
     while page <= total_pages:
         req_params = {**params, "page": page}
@@ -256,6 +271,21 @@ def fetch_all_pages(session, endpoint, params=None):
         records = extract_records(data, endpoint)
         all_records.extend(records)
 
+        # Collect sideloaded sections: any list-valued key that isn't the
+        # primary records list, isn't pagination metadata, and isn't empty.
+        # We identify the primary list by object identity, not by key name,
+        # because extract_records() may have matched any of several plural
+        # variants.
+        if isinstance(data, dict):
+            for key, val in data.items():
+                if key in pagination_keys:
+                    continue
+                if not isinstance(val, list):
+                    continue
+                if val is records:        # this is the primary records list
+                    continue
+                sideloads.setdefault(key, []).extend(val)
+
         last_budget = check_budget(payload, session)
 
         if total_pages > 1:
@@ -263,7 +293,7 @@ def fetch_all_pages(session, endpoint, params=None):
 
         page += 1
 
-    return all_records, total_pages, last_budget
+    return all_records, total_pages, last_budget, sideloads
 
 
 # ── Record transformation ────────────────────────────────────────────
@@ -442,7 +472,8 @@ def write_sync_log(conn, resource, started_at, status, fetched, upserted, error=
 # ── Sync logic ────────────────────────────────────────────────────────
 
 def sync_resource(session, conn, resource, mapping, ctx_resource,
-                  required_params, is_static, force_full=False):
+                  required_params, is_static, force_full=False,
+                  _endpoints_cfg=None):
     """Sync a single resource from the API into SQLite.
 
     Returns (records_fetched, records_upserted, status, error_msg, raw_records).
@@ -482,9 +513,17 @@ def sync_resource(session, conn, resource, mapping, ctx_resource,
     if resource == "job" and "status" not in params:
         params["status"] = "all"
 
+    # --- Sideloads (see system/endpoints.yml) ---
+    # If this resource declares a sideload, ask the API to include the
+    # related records alongside the primary ones in a single response.
+    sideload_list = get_sideload(resource, _endpoints_cfg)
+    if sideload_list:
+        params["_sideload"] = ",".join(sideload_list)
+        logger.info(f"[{tbl}] Sideload requested: {params['_sideload']}")
+
     # --- Fetch ---
     try:
-        records, total_pages, _ = fetch_all_pages(session, endpoint, params)
+        records, total_pages, _, sideloads = fetch_all_pages(session, endpoint, params)
     except RuntimeError as e:
         logger.error(f"[{tbl}] Fetch failed: {e}")
         write_sync_log(conn, resource, started_at, "failed", 0, 0, str(e))
@@ -496,6 +535,40 @@ def sync_resource(session, conn, resource, mapping, ctx_resource,
         update_sync_status(conn, resource, tbl)
         write_sync_log(conn, resource, started_at, "success", 0, 0)
         return 0, 0, "success", None, []
+
+    # --- Sideload extraction: enrich primary records with sideloaded data ---
+    # For service_recurrence with the nextDueService sideload, the response
+    # includes a separate `serviceRequests` section containing the projected
+    # next-due service request for each recurrence (real or synthetic).
+    # We pluck windowStart from each one and attach it to its parent
+    # recurrence as a `currentlyDue` field so transform_record() picks it up
+    # via the api_knowledge.yml override.
+    #
+    # Matching: the sideloaded service request points back to its parent
+    # recurrence via the `serviceRecurrence` field. For synthetic projections
+    # (where no real service request exists yet), the sideloaded record's id
+    # is the negation of the parent recurrence id.
+    if sideloads and resource == "servicerecurrence":
+        sr_list = sideloads.get("serviceRequests", [])
+        # Build a lookup: parent recurrence id -> sideloaded service request
+        by_parent = {}
+        for sr in sr_list:
+            parent_id = sr.get("serviceRecurrence")
+            if parent_id is not None:
+                by_parent[parent_id] = sr
+            # Also handle synthetic records keyed by negative id
+            sr_id = sr.get("id")
+            if sr_id is not None and sr_id < 0:
+                by_parent[-sr_id] = sr
+        # Walk each recurrence and inject currentlyDue from its match
+        matched = 0
+        for rec in records:
+            rec_id = rec.get("id")
+            sideloaded = by_parent.get(rec_id)
+            if sideloaded:
+                rec["currentlyDue"] = sideloaded.get("windowStart")
+                matched += 1
+        logger.info(f"[{tbl}] Matched currently_due for {matched}/{len(records)} recurrences (from {len(sr_list)} sideloaded records)")
 
     # --- Transform ---
     transformed = []
@@ -663,6 +736,25 @@ def get_required_params(resource, endpoints_cfg):
     return None
 
 
+def get_sideload(resource, endpoints_cfg):
+    """Get sideload list for a resource from endpoints.yml.
+
+    Returns a list of sideload names (e.g. ["serviceRecurrence.nextDueService"])
+    or None if no sideload is configured for the resource.
+
+    Sideloads are a ServiceTrade API feature: they request related records
+    in the same response as the primary records, avoiding extra HTTP calls.
+    See system/endpoints.yml for the per-resource sideload config.
+    """
+    for entry in endpoints_cfg.get("resources", []):
+        if isinstance(entry, dict):
+            if entry.get("endpoint") == resource:
+                return entry.get("sideload")
+        elif entry == resource:
+            return None
+    return None
+
+
 def main():
     import argparse
 
@@ -749,6 +841,7 @@ def main():
         fetched, upserted, status, error, raw_records = sync_resource(
             session, conn, resource, mapping, ctx_res,
             required_params, is_static, force_full=force,
+            _endpoints_cfg=endpoints_cfg,
         )
         results.append((table_name(resource), fetched, upserted, status, error))
 

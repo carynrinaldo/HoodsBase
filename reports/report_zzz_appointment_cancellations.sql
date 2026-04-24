@@ -1,8 +1,8 @@
--- name: report_appointment_cancellations
+-- name: report_zzz_appointment_cancellations
 -- description: Appointment cancellations broken down by whether they were canceled by the customer or the vendor, with customer and location detail.
--- created_at: 2026-03-20T21:20:51Z
-DROP VIEW IF EXISTS report_appointment_cancellations;
-CREATE VIEW report_appointment_cancellations AS
+-- created_at: 2026-04-24T22:59:37Z
+DROP VIEW IF EXISTS report_zzz_appointment_cancellations;
+CREATE VIEW report_zzz_appointment_cancellations AS
 SELECT
   c.name AS customer,
   l.name AS location,
