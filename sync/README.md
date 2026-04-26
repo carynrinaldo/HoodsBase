@@ -101,7 +101,7 @@ python sync/sync.py
 - Explicitly requesting one (e.g. `python sync/sync.py tag`) forces a re-pull
 - `--full` also forces a re-pull
 
-**Core resources** (company, location, contact, job, appointment, invoice, quote, asset, deficiency, service_recurrence, user):
+**Core resources** (company, location, contact, job, appointment, service_request, invoice, quote, asset, deficiency, service_recurrence, user):
 - First run: full pull (no `sync_status` entry exists)
 - Subsequent runs: incremental pull using `updatedAfter={last_synced_at}`
 - `--full` ignores `sync_status` and re-fetches everything
@@ -219,25 +219,28 @@ docker exec hoodsbase-dev grep -E " (ERROR|WARNING) " logs/pipeline.log
 
 The log rotates automatically at 5 MB, keeping 5 backups. Claude can also read it during a conversation via the MCP `read_log()` tool.
 
-## Record Counts (as of initial backfill)
+## Record Counts (snapshot)
+
+*Last refreshed: 2026-04-26*
 
 | Table | Records |
 |-------|---------|
 | service_line | 11 |
-| tag | 31 |
+| tag | 32 |
 | payment_terms | 10 |
-| company | 557 |
-| location | 635 |
-| contact | 893 |
-| job | 6,081 |
-| appointment | 7,403 |
-| invoice | 5,273 |
-| invoice_item | 6,549 |
-| quote | 627 |
-| quote_item | 1,108 |
-| asset | 644 |
+| company | 559 |
+| location | 637 |
+| contact | 897 |
+| job | 6,216 |
+| appointment | 7,544 |
+| service_request | 14,627 |
+| invoice | 5,338 |
+| invoice_item | 6,635 |
+| quote | 630 |
+| quote_item | 1,113 |
+| asset | 646 |
 | deficiency | 73 |
-| service_recurrence | 4,415 |
+| service_recurrence | 4,497 |
 | user | 16 |
 
 ## Configuration Files

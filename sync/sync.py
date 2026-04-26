@@ -58,7 +58,7 @@ TABLE_NAME_MAP = {
 
 # Core resources in dependency order
 CORE_ORDER = [
-    "company", "location", "contact", "job", "appointment",
+    "company", "location", "contact", "job", "appointment", "servicerequest",
     "invoice", "quote", "asset", "deficiency", "servicerecurrence", "user",
 ]
 
